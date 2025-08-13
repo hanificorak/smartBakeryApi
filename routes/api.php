@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DefinitionsController;
+use App\Http\Controllers\StockController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,4 +14,10 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/products/getData', [DefinitionsController::class, 'getProducts']);
     Route::post('/products/addProduct', [DefinitionsController::class, 'addProduct']);
     Route::post('/products/productDelete', [DefinitionsController::class, 'productDelete']);
+
+    Route::post('/stocks/getParam', [StockController::class, 'getParam']);
+    Route::post('/stocks/getWeatherItem', [StockController::class, 'getWeatherItem']);
+    Route::post('/stocks/saveStock', [StockController::class, 'saveStock']);
+    Route::post('/stocks/getStockData', [StockController::class, 'getStockData']);
+
 });

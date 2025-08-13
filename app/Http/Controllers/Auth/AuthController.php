@@ -20,7 +20,7 @@ class AuthController
                 return ["status" => false, "message" => 'Geçersiz kullanıcı adı veya şifre'];
             }
         } catch (\Throwable $th) {
-            return ["status" => false, "message" => 'İşlem başarısız.'];
+            return ["status" => false, "message" => 'İşlem başarısız.'.$th->getMessage()];
         }
 
         return ["status" => true, 'access_token' => $token];
