@@ -62,6 +62,7 @@ class StockClass
 
             $product_id = request()->get('product_id');
             $weather_id = request()->get('weather_id');
+            $temperature = request()->get('temperature');
             $amount = request()->get('amount');
             $desc = request()->get('desc');
 
@@ -74,6 +75,7 @@ class StockClass
             $mdl->weather_id = $weather_id;
             $mdl->amount = $amount;
             $mdl->desc = $desc;
+            $mdl->temperature = $temperature;
 
             if ($mdl->save()) {
                 $rs->status = true;
