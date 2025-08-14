@@ -46,4 +46,12 @@ class StockController
         }
     }
 
+    public function stockDelete()
+    {
+        try {
+           return response()->json($this->class->stockDelete());
+        } catch (\Throwable $th) {
+        }
+    }
+
 }

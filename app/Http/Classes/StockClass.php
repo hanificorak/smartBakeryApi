@@ -94,9 +94,30 @@ class StockClass
         $rs = new ResultClass();
         try {
 
+            $date = request()->get('date');
 
-            $rs->obj = DaysStocks::with(['product:id,name'])->get();
+            $rs->obj = DaysStocks::with(['product:id,name'])->whereDate('created_at', '=', Carbon::parse($date)->format('Y-m-d'))->get();
             $rs->status = true;
+        } catch (\Throwable $th) {
+            $rs->status = false;
+            $rs->message = $th->getMessage();
+        }
+        return $rs;
+    }
+
+    public function stockDelete()
+    {
+        $rs = new ResultClass();
+        try {
+
+         $stock_id = request()->get('stock_id');
+         
+         if(DB::table('days_stocks')->where('id',$stock_id)->delete()){
+            $rs->status = true;
+         }else{
+            $rs->status = false;
+         }
+
         } catch (\Throwable $th) {
             $rs->status = false;
             $rs->message = $th->getMessage();

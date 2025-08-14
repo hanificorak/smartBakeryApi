@@ -19,5 +19,6 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/stocks/getWeatherItem', [StockController::class, 'getWeatherItem']);
     Route::post('/stocks/saveStock', [StockController::class, 'saveStock']);
     Route::post('/stocks/getStockData', [StockController::class, 'getStockData']);
+    Route::post('/stocks/stockDelete', [StockController::class, 'stockDelete']);
 
 });
