@@ -23,4 +23,5 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/stocks/stockDelete', [StockController::class, 'stockDelete']);
 
     Route::post('/endofdays/getEndOfListData', [EndOfDayController::class, 'getEndOfListData']);
+    Route::post('/endofdays/addEndOfData', [EndOfDayController::class, 'addEndOfData']);
 });

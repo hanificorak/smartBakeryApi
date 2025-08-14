@@ -28,4 +28,25 @@ class EndOfDayClass
         }
         return $rs;
     }
+
+    public function addEndOfData()
+    {
+        $rs = new ResultClass();
+        try {
+
+            $data = request()->get('data');
+
+            foreach ($data as $key => $value) {
+                $id = $value['id']; // day_stock_id
+                $current = $value['current']; // bugün satılan miktar
+                $product_id = $value['current']; // bugün satılan miktar
+
+
+            }
+        } catch (\Throwable $th) {
+            $rs->status = false;
+            $rs->message = $th->getMessage();
+        }
+        return $rs;
+    }
 }

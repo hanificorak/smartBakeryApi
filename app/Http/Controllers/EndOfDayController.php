@@ -16,9 +16,16 @@ class EndOfDayController
     public function getEndOfListData()
     {
         try {
-           return response()->json($this->class->getEndOfListData());
+            return response()->json($this->class->getEndOfListData());
         } catch (\Throwable $th) {
         }
     }
-    
+
+    public function addEndOfData()
+    {
+        try {
+            return response()->json($this->class->getEndOfListData());
+        } catch (\Throwable $th) {
+        }
+    }
 }
