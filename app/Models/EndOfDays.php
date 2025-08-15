@@ -10,4 +10,9 @@ class EndOfDays extends Model
     {
         return $this->belongsTo(Products::class, 'product_id', 'id');
     }
+
+     public function weather()
+    {
+        return $this->belongsTo(WeatherCodes::class, 'weather_code', 'id');
+    }
 }

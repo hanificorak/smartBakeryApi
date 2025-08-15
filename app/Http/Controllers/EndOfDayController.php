@@ -44,4 +44,12 @@ class EndOfDayController
         } catch (\Throwable $th) {
         }
     }
+
+      public function delete()
+    {
+        try {
+            return response()->json($this->class->delete());
+        } catch (\Throwable $th) {
+        }
+    }
 }

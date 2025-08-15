@@ -4,6 +4,7 @@ namespace App\Http\Classes;
 
 use App\Http\Classes\Tools\ResultClass;
 use App\Models\DaysStocks;
+use App\Models\EndOfDays;
 use App\Models\Products;
 use App\Models\User;
 use App\Models\WeatherCodes;
@@ -61,8 +62,6 @@ class StockClass
         try {
 
             $product_id = request()->get('product_id');
-            $weather_id = request()->get('weather_id');
-            $temperature = request()->get('temperature');
             $amount = request()->get('amount');
             $desc = request()->get('desc');
 
@@ -72,10 +71,8 @@ class StockClass
             $mdl->updated_at = null;
 
             $mdl->product_id = $product_id;
-            $mdl->weather_id = $weather_id;
             $mdl->amount = $amount;
             $mdl->desc = $desc;
-            $mdl->temperature = $temperature;
 
             if ($mdl->save()) {
                 $rs->status = true;
@@ -110,14 +107,19 @@ class StockClass
         $rs = new ResultClass();
         try {
 
-         $stock_id = request()->get('stock_id');
-         
-         if(DB::table('days_stocks')->where('id',$stock_id)->delete()){
-            $rs->status = true;
-         }else{
-            $rs->status = false;
-         }
+            $stock_id = request()->get('stock_id');
+            $check = EndOfDays::where('day_stock_id', $stock_id)->count();
+            if ($check > 0) {
+                $rs->status =false;
+                $rs->sub_info = 'usage_rec';
+                return $rs;
+            }
 
+            if (DB::table('days_stocks')->where('id', $stock_id)->delete()) {
+                $rs->status = true;
+            } else {
+                $rs->status = false;
+            }
         } catch (\Throwable $th) {
             $rs->status = false;
             $rs->message = $th->getMessage();

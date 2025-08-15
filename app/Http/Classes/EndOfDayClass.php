@@ -92,10 +92,28 @@ class EndOfDayClass
         $rs = new ResultClass();
         try {
 
-        $data = EndOfDays::with('product')->get();
+        $data = EndOfDays::with('product')->with('weather')->get();
 
         $rs->status = true;
         $rs->obj = $data;
+        } catch (\Throwable $th) {
+            $rs->status = false;
+            $rs->message = $th->getMessage();
+        }
+        return $rs;
+    }
+
+    public function delete()
+    {
+        $rs = new ResultClass();
+        try {
+
+            $id = request()->get('id');
+
+            if(DB::table('end_of_days')->where('id',$id)->delete()){
+                $rs->status = true;
+            }
+
         } catch (\Throwable $th) {
             $rs->status = false;
             $rs->message = $th->getMessage();
