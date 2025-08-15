@@ -4,6 +4,7 @@ namespace App\Http\Classes;
 
 use App\Http\Classes\Tools\ResultClass;
 use App\Models\DaysStocks;
+use App\Models\EndOfDays;
 use App\Models\Products;
 use App\Models\User;
 use Carbon\Carbon;
@@ -35,14 +36,66 @@ class EndOfDayClass
         try {
 
             $data = request()->get('data');
+            $weather_temp = request()->get('weather_temp');
+            $weather_temp_code = request()->get('weather_temp_code');
 
             foreach ($data as $key => $value) {
                 $id = $value['id']; // day_stock_id
                 $current = $value['current']; // bugün satılan miktar
-                $product_id = $value['current']; // bugün satılan miktar
+                $product_id = $value['product_id']; // ürün bilgisi
+                $amount = $value['amount']; // Bugün üretilen adet bilgisi
 
+                $mdl = new EndOfDays();
+                $mdl->create_user_id = Auth::user()->id;
+                $mdl->created_at = Carbon::now();
+                $mdl->updated_at = null;
 
+                $mdl->product_id = $product_id;
+                $mdl->current = $current;
+                $mdl->amount = $amount;
+                $mdl->day_stock_id = $id;
+                $mdl->weather_code = $weather_temp_code;
+                $mdl->temperature = $weather_temp;
+                $mdl->save();
             }
+
+            $rs->status = true;
+            $rs->message = "ok";
+        } catch (\Throwable $th) {
+            $rs->status = false;
+            $rs->message = $th->getMessage();
+        }
+        return $rs;
+    }
+
+    public function endOfDataCheck()
+    {
+        $rs = new ResultClass();
+        try {
+
+            $check = EndOfDays::whereDate('created_at', Carbon::now())->count();
+
+            if ($check > 0) {
+                $rs->status = false;
+            } else {
+                $rs->status = true;
+            }
+        } catch (\Throwable $th) {
+            $rs->status = false;
+            $rs->message = $th->getMessage();
+        }
+        return $rs;
+    }
+
+    public function getEndOfData()
+    {
+        $rs = new ResultClass();
+        try {
+
+        $data = EndOfDays::with('product')->get();
+
+        $rs->status = true;
+        $rs->obj = $data;
         } catch (\Throwable $th) {
             $rs->status = false;
             $rs->message = $th->getMessage();

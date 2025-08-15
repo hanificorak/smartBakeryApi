@@ -24,4 +24,6 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/endofdays/getEndOfListData', [EndOfDayController::class, 'getEndOfListData']);
     Route::post('/endofdays/addEndOfData', [EndOfDayController::class, 'addEndOfData']);
+    Route::post('/endofdays/endOfDataCheck', [EndOfDayController::class, 'endOfDataCheck']);
+    Route::post('/endofdays/getEndOfData', [EndOfDayController::class, 'getEndOfData']);
 });
