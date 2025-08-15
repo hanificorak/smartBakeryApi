@@ -37,6 +37,8 @@ class StockClass
             $rs->status = false;
             $rs->message = $th->getMessage();
         }
+        unset($weathers);
+        unset($products);
         return $rs;
     }
 
@@ -53,6 +55,8 @@ class StockClass
             $rs->status = false;
             $rs->message = $th->getMessage();
         }
+
+        unset($code);
         return $rs;
     }
 
@@ -83,6 +87,11 @@ class StockClass
             $rs->status = false;
             $rs->message = $th->getMessage();
         }
+
+        unset($mdl);
+        unset($product_id);
+        unset($desc);
+        unset($amount);
         return $rs;
     }
 
@@ -99,6 +108,8 @@ class StockClass
             $rs->status = false;
             $rs->message = $th->getMessage();
         }
+
+        unset($date);
         return $rs;
     }
 
@@ -110,7 +121,7 @@ class StockClass
             $stock_id = request()->get('stock_id');
             $check = EndOfDays::where('day_stock_id', $stock_id)->count();
             if ($check > 0) {
-                $rs->status =false;
+                $rs->status = false;
                 $rs->sub_info = 'usage_rec';
                 return $rs;
             }
@@ -124,6 +135,9 @@ class StockClass
             $rs->status = false;
             $rs->message = $th->getMessage();
         }
+
+        unset($stock_id);
+        unset($check);
         return $rs;
     }
 }
