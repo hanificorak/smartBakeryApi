@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DefinitionsController;
 use App\Http\Controllers\EndOfDayController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StockController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,5 +28,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/endofdays/endOfDataCheck', [EndOfDayController::class, 'endOfDataCheck']);
     Route::post('/endofdays/getEndOfData', [EndOfDayController::class, 'getEndOfData']);
     Route::post('/endofdays/delete', [EndOfDayController::class, 'delete']);
+    
+    Route::post('/reports/getReportData', [ReportController::class, 'getReportData']);
 
 });
