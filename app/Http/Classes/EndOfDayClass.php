@@ -21,7 +21,7 @@ class EndOfDayClass
         $rs = new ResultClass();
         try {
 
-            $rs->obj = DaysStocks::with(['product:id,name'])->whereDate('created_at', '=', Carbon::now()->format('Y-m-d'))->get();
+            $rs->obj = DaysStocks::with(['product:id,name'])->whereDate('created_at', '=', '2025-08-17')->get();
             $rs->status = true;
         } catch (\Throwable $th) {
             $rs->status = false;
@@ -92,7 +92,7 @@ class EndOfDayClass
         $rs = new ResultClass();
         try {
 
-        $data = EndOfDays::with('product')->with('weather')->get();
+        $data = EndOfDays::with('product')->with('weather')->whereDate('created_at','=',Carbon::now())->get();
 
         $rs->status = true;
         $rs->obj = $data;

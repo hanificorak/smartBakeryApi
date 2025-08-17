@@ -30,5 +30,6 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/endofdays/delete', [EndOfDayController::class, 'delete']);
     
     Route::post('/reports/getReportData', [ReportController::class, 'getReportData']);
+    Route::post('/reports/createReport', [ReportController::class, 'createReport']);
 
 });

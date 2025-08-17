@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Classes\ReportClass;
+use App\Http\Classes\Tools\ResultClass;
+use App\Models\EndOfDays;
+use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReportController
 {
@@ -12,13 +16,20 @@ class ReportController
     {
         $this->class = new ReportClass();
     }
-    
-          public function getReportData()
+
+    public function getReportData()
     {
         try {
             return response()->json($this->class->getReportData());
         } catch (\Throwable $th) {
         }
     }
-  
+
+    public function createReport()
+    {
+        try {
+            return response()->json($this->class->reportSend());
+        } catch (\Throwable $th) {
+        }
+    }
 }
