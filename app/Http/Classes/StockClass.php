@@ -24,7 +24,7 @@ class StockClass
         try {
 
             $weathers = WeatherCodes::get();
-            $products = Products::get();
+            $products = Products::where('firm_id',Auth::user()->firm_id)->get();
 
             $data = [
                 "weather" => $weathers,
@@ -73,6 +73,7 @@ class StockClass
             $mdl->created_at = Carbon::now();
             $mdl->create_user_id = Auth::user()->id;
             $mdl->updated_at = null;
+            $mdl->firm_id = Auth::user()->firm_id;
 
             $mdl->product_id = $product_id;
             $mdl->amount = $amount;
@@ -102,7 +103,7 @@ class StockClass
 
             $date = request()->get('date');
 
-            $rs->obj = DaysStocks::with(['product:id,name'])->whereDate('created_at', '=', Carbon::parse($date)->format('Y-m-d'))->get();
+            $rs->obj = DaysStocks::with(['product:id,name'])->where('firm_id',Auth::user()->firm_id)->whereDate('created_at', '=', Carbon::parse($date)->format('Y-m-d'))->get();
             $rs->status = true;
         } catch (\Throwable $th) {
             $rs->status = false;

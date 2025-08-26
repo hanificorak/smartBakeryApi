@@ -10,6 +10,7 @@ use App\Models\Products;
 use App\Models\User;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class ReportClass
@@ -24,7 +25,7 @@ class ReportClass
             $weather = request()->get('weather');
             $dateRange = request()->get('date');
 
-            $query = EndOfDays::with(['product', 'weather']);
+            $query = EndOfDays::with(['product', 'weather'])->where('firm_id',Auth::user()->firm_id);
 
             if ($product != null) {
                 $query->where('product_id', $product);
@@ -83,7 +84,7 @@ class ReportClass
             $dateRange = request()->get('date');
             $mail = request()->get('mail');
 
-            $query = EndOfDays::with(['product', 'weather']);
+            $query = EndOfDays::with(['product', 'weather'])->where('firm_id',Auth::user()->firm_id);
 
             if ($product != null) {
                 $query->where('product_id', $product);

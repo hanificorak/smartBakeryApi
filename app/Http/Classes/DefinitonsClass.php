@@ -19,7 +19,7 @@ class DefinitonsClass
         $rs = new ResultClass();
         try {
 
-            $rs->obj = Products::orderByDesc('id')->get();
+            $rs->obj = Products::where('firm_id', Auth::user()->firm_id)->orderByDesc('id')->get();
             $rs->status = true;
         } catch (\Throwable $th) {
             $rs->status = false;
@@ -54,6 +54,7 @@ class DefinitonsClass
             $mdl->name = $productName;
             $mdl->short_desc = $shortDesc;
             $mdl->desc = $desc;
+            $mdl->firm_id = Auth::user()->firm_id;
 
             if ($mdl->save()) {
                 $rs->status = true;

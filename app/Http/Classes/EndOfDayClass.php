@@ -21,7 +21,7 @@ class EndOfDayClass
         $rs = new ResultClass();
         try {
 
-            $rs->obj = DaysStocks::with(['product:id,name'])->whereDate('created_at', '=', '2025-08-17')->get();
+            $rs->obj = DaysStocks::with(['product:id,name'])->where('firm_id', Auth::user()->firm_id)->whereDate('created_at', '=', Carbon::now())->get();
             $rs->status = true;
         } catch (\Throwable $th) {
             $rs->status = false;
@@ -50,6 +50,7 @@ class EndOfDayClass
                 $mdl->created_at = Carbon::now();
                 $mdl->updated_at = null;
 
+                $mdl->firm_id = Auth::user()->firm_id;
                 $mdl->product_id = $product_id;
                 $mdl->current = $current;
                 $mdl->amount = $amount;
@@ -73,7 +74,7 @@ class EndOfDayClass
         $rs = new ResultClass();
         try {
 
-            $check = EndOfDays::whereDate('created_at', Carbon::now())->count();
+            $check = EndOfDays::whereDate('created_at', Carbon::now())->where('firm_id', Auth::user()->firm_id)->count();
 
             if ($check > 0) {
                 $rs->status = false;
@@ -92,10 +93,10 @@ class EndOfDayClass
         $rs = new ResultClass();
         try {
 
-        $data = EndOfDays::with('product')->with('weather')->whereDate('created_at','=',Carbon::now())->get();
+            $data = EndOfDays::with('product')->where('firm_id', Auth::user()->firm_id)->with('weather')->whereDate('created_at', '=', Carbon::now())->get();
 
-        $rs->status = true;
-        $rs->obj = $data;
+            $rs->status = true;
+            $rs->obj = $data;
         } catch (\Throwable $th) {
             $rs->status = false;
             $rs->message = $th->getMessage();
@@ -110,10 +111,9 @@ class EndOfDayClass
 
             $id = request()->get('id');
 
-            if(DB::table('end_of_days')->where('id',$id)->delete()){
+            if (DB::table('end_of_days')->where('id', $id)->delete()) {
                 $rs->status = true;
             }
-
         } catch (\Throwable $th) {
             $rs->status = false;
             $rs->message = $th->getMessage();
