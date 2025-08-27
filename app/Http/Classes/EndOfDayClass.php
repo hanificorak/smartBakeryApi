@@ -3,6 +3,7 @@
 namespace App\Http\Classes;
 
 use App\Http\Classes\Tools\ResultClass;
+use App\Models\DaysInfo;
 use App\Models\DaysStocks;
 use App\Models\EndOfDays;
 use App\Models\Products;
@@ -21,7 +22,11 @@ class EndOfDayClass
         $rs = new ResultClass();
         try {
 
-            $rs->obj = DaysStocks::with(['product:id,name'])->where('firm_id', Auth::user()->firm_id)->whereDate('created_at', '=', Carbon::now())->get();
+            $data = DaysStocks::with(['product:id,name'])->where('firm_id', Auth::user()->firm_id)->whereDate('created_at', '=', Carbon::now()->addDay(0))->get();
+            foreach ($data as $key => $value) {
+               $data[$key]->parentdate = $value->getRootCreatedAt();
+            }
+            $rs->obj = $data;
             $rs->status = true;
         } catch (\Throwable $th) {
             $rs->status = false;
@@ -40,6 +45,8 @@ class EndOfDayClass
             $weather_temp_code = request()->get('weather_temp_code');
 
             foreach ($data as $key => $value) {
+
+
                 $id = $value['id']; // day_stock_id
                 $current = $value['current']; // bugün satılan miktar
                 $product_id = $value['product_id']; // ürün bilgisi
@@ -58,6 +65,40 @@ class EndOfDayClass
                 $mdl->weather_code = $weather_temp_code;
                 $mdl->temperature = $weather_temp;
                 $mdl->save();
+
+                $mdl_day = null;
+                if ($value['ert_status'] == true) {
+                    $mdl_day = new DaysStocks();
+                    $mdl_day->created_at = Carbon::now()->addDay(1);
+                    $mdl_day->create_user_id = Auth::user()->id;
+                    $mdl_day->updated_at = null;
+                    $mdl_day->firm_id = Auth::user()->firm_id;
+                    $mdl_day->product_id = $product_id;
+                    $mdl_day->amount = $amount - $current;
+                    $mdl_day->desc = "Ertesi günden aktarılan kayıt.";
+                    $mdl_day->parent_id = $id;
+                    $mdl_day->save();
+                }
+
+                $rem_count = $amount - $current;
+
+                if ($mdl_day != null) {
+                    $rem_count = $rem_count - $mdl_day->amount;
+                }
+
+                $days = new DaysInfo();
+                $days->created_at = Carbon::now();
+                $days->create_user_id = Auth::user()->id;
+                $days->product_id = $product_id;
+                $days->amount = $amount;
+                $days->sales_amount = $current;
+                $days->remove_amount = $rem_count;
+                $days->ert_count = ($mdl_day == null ? 0 : $mdl_day->amount);
+                $days->weather_code = $weather_temp_code;
+                $days->temperature = $weather_temp;
+                $days->end_of_id = $mdl->id;
+                $days->firm_id = $mdl->firm_id;
+                $days->save();
             }
 
             $rs->status = true;
@@ -93,7 +134,9 @@ class EndOfDayClass
         $rs = new ResultClass();
         try {
 
-            $data = EndOfDays::with('product')->where('firm_id', Auth::user()->firm_id)->with('weather')->whereDate('created_at', '=', Carbon::now())->get();
+            $data = DaysInfo::with('product')->with('weather')->where('firm_id', Auth::user()->firm_id)->whereDate('created_at', '=', Carbon::now()->addDay(0))->get();
+
+            // $data = EndOfDays::with('product')->where('firm_id', Auth::user()->firm_id)->with('weather')->whereDate('created_at', '=', Carbon::now())->get();
 
             $rs->status = true;
             $rs->obj = $data;
@@ -107,14 +150,26 @@ class EndOfDayClass
     public function delete()
     {
         $rs = new ResultClass();
+        DB::beginTransaction();
         try {
 
             $id = request()->get('id');
 
-            if (DB::table('end_of_days')->where('id', $id)->delete()) {
+            $item = EndOfDays::where('id', $id)->first();
+            $day_item = DaysStocks::where('parent_id', $item->day_stock_id)->first();
+
+            if ($day_item != null) {
+                DB::table('days_stocks')->where('parent_id', $item->day_stock_id)->delete();
+            }
+
+            if (DB::table('end_of_days')->where('id', $id)->delete() && DB::table('days_info')->where('end_of_id', $id)->delete()) {
+                DB::commit();
+
                 $rs->status = true;
             }
         } catch (\Throwable $th) {
+            DB::rollBack();
+
             $rs->status = false;
             $rs->message = $th->getMessage();
         }

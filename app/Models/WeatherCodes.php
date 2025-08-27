@@ -11,4 +11,9 @@ class WeatherCodes extends Model
     {
         return $this->hasMany(EndOfDays::class, 'weather_code', 'id');
     }
+
+            public function daysInfo()
+    {
+        return $this->hasMany(DaysInfo::class, 'product_id', 'id');
+    }
 }

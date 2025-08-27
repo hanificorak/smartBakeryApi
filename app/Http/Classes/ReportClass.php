@@ -4,6 +4,7 @@ namespace App\Http\Classes;
 
 use App\Http\Classes\Tools\ResultClass;
 use App\Mail\ReportMail;
+use App\Models\DaysInfo;
 use App\Models\DaysStocks;
 use App\Models\EndOfDays;
 use App\Models\Products;
@@ -25,7 +26,7 @@ class ReportClass
             $weather = request()->get('weather');
             $dateRange = request()->get('date');
 
-            $query = EndOfDays::with(['product', 'weather'])->where('firm_id',Auth::user()->firm_id);
+            $query = DaysInfo::with(['product', 'weather'])->where('firm_id', Auth::user()->firm_id);
 
             if ($product != null) {
                 $query->where('product_id', $product);
@@ -63,7 +64,20 @@ class ReportClass
                 $query->whereBetween('created_at', [$startDate, $endDate]);
             }
 
-            $rs->obj = $query->get();
+            $dt = $query->get();
+
+            foreach ($dt as $key => $value) {
+
+                $dt[$key]->parentdate = null;
+                $end_of_data = EndOfDays::where('id', $value->end_of_id)->first();
+                if ($end_of_data != null) {
+                    $ds_data = DaysStocks::where('id', $end_of_data->day_stock_id)->first();
+                    if ($ds_data != null && $ds_data->parent_id != null) {
+                        $dt[$key]->parentdate = $ds_data->getRootCreatedAt();
+                    }
+                }
+            }
+            $rs->obj = $dt;
             $rs->status = true;
         } catch (\Throwable $th) {
             $rs->status = false;
@@ -84,7 +98,7 @@ class ReportClass
             $dateRange = request()->get('date');
             $mail = request()->get('mail');
 
-            $query = EndOfDays::with(['product', 'weather'])->where('firm_id',Auth::user()->firm_id);
+            $query = EndOfDays::with(['product', 'weather'])->where('firm_id', Auth::user()->firm_id);
 
             if ($product != null) {
                 $query->where('product_id', $product);
@@ -120,7 +134,7 @@ class ReportClass
 
             if ($startDate && $endDate) {
                 $query->whereBetween('created_at', [$startDate, $endDate]);
-            }else{
+            } else {
                 $startDate = Carbon::now()->format('d.m.Y');
                 $endDate = Carbon::now()->format('d.m.Y');
             }
@@ -139,7 +153,7 @@ class ReportClass
             $fullPath = $reportPath . '/' . $randomFileName;
 
             // PDF oluştur
-            $pdf = Pdf::loadView('reports.general-report', compact('reportData','startDate','endDate'));
+            $pdf = Pdf::loadView('reports.general-report', compact('reportData', 'startDate', 'endDate'));
 
             // PDF ayarları
             $pdf->setPaper('A4', 'portrait');

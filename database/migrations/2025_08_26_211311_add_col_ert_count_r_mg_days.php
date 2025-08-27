@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('days_stocks', function (Blueprint $table) {
+        Schema::table('days_info', function (Blueprint $table) {
+            $table->integer('weather_code')->nullable();
             $table->decimal('temperature', 4, 1)->nullable();
+
         });
     }
 

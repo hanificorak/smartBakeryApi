@@ -38,7 +38,6 @@ class UserClass
             $name = request()->get('name');
             $email = request()->get('email');
             $password = request()->get('password');
-            $firm_id = request()->get('firm_id');
 
 
             $firm_id = Auth::user()->firm_id;

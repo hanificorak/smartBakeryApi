@@ -15,4 +15,10 @@ class Products extends Model
     {
         return $this->hasMany(EndOfDays::class, 'product_id', 'id');
     }
+
+        public function daysInfo()
+    {
+        return $this->hasMany(DaysInfo::class, 'product_id', 'id');
+    }
+
 }
