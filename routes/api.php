@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DefinitionsController;
 use App\Http\Controllers\EndOfDayController;
 use App\Http\Controllers\GuessController;
@@ -42,5 +43,8 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/users/addUser', [UserController::class, 'addUser']);
     Route::post('/users/getUsers', [UserController::class, 'getUsers']);
+
+    Route::post('/company/getData',[CompanyController::class,'getData']);
+    Route::post('/company/save',[CompanyController::class,'save']);
     
 });
