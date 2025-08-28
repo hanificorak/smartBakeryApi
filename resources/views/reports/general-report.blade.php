@@ -4,312 +4,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
-    <title>Genel Rapor - smartBakery</title>
-
+    <title>Ürün Satış ve Atık Raporu</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'DejaVu Sans', sans-serif;
-            background: #f5f7fa;
-            color: #2d3748;
-            line-height: 1.6;
-            padding: 0;
+            font-family: "DejaVu Sans Mono", monospace;
             margin: 0;
-        }
-
-        .container {
-            background: white;
-            border-radius: 0;
-            box-shadow: none;
-            overflow: hidden;
+            padding: 10px;
+            padding-top: 0px;
+            color: #333;
+            font-size: 12px;
+            line-height: 1.4;
         }
 
         .header {
-            background: #667eea;
-            color: white;
             text-align: center;
-            padding: 20px 10px;
-            margin: 0;
+            border-bottom: 3px solid #2c3e50;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
         }
 
-        .main-title {
-            font-size: 36px;
+        .company-logo {
+            font-size: 28px;
             font-weight: bold;
+            color: #2c3e50;
             margin-bottom: 5px;
-            letter-spacing: -1px;
         }
 
-        .subtitle {
-            font-size: 18px;
-            opacity: 0.95;
-            font-weight: 300;
-        }
-
-        .report-info {
-            background: #f8fafc;
-            padding: 30px;
-            margin: 0;
-            border-left: 4px solid #667eea;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .content {
-            padding: 30px 40px 40px 40px;
-        }
-
-        .report-info h3 {
-            color: #2d3748;
+        .company-info {
+            font-size: 10px;
+            color: #7f8c8d;
             margin-bottom: 15px;
-            font-size: 20px;
-            font-weight: 600;
         }
 
-        .report-info p {
-            color: #4a5568;
-            font-size: 14px;
-            margin-bottom: 8px;
+        .report-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #34495e;
+            margin: 15px 0;
+        }
+
+        .report-meta {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+            display: table;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .meta-row {
+            display: table-row;
+        }
+
+        .meta-cell {
+            display: table-cell;
+            padding: 5px 15px;
+            border-right: 1px solid #bdc3c7;
+        }
+
+        .meta-cell:last-child {
+            border-right: none;
+        }
+
+        .meta-label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .meta-value {
+            color: #34495e;
+        }
+
+        .summary-section {
+            margin-bottom: 25px;
+        }
+
+        .summary-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
         }
 
         .summary-cards {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 40px;
+            display: table;
+            width: 100%;
+            margin-bottom: 20px;
         }
 
         .summary-card {
-            flex: 1;
-            background: white;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 25px;
+            display: table-cell;
+            width: 33.33%;
             text-align: center;
+            padding: 15px;
+            border: 1px solid #bdc3c7;
+            background-color: #f8f9fa;
         }
 
-        .summary-card h4 {
-            font-size: 28px;
+        .summary-card:first-child {
+            border-right: none;
+        }
+
+        .summary-card:last-child {
+            border-left: none;
+        }
+
+        .card-title {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 11px;
             margin-bottom: 8px;
-            font-weight: 700;
-            color: #667eea;
         }
 
-        .summary-card p {
-            font-size: 14px;
-            color: #718096;
-            font-weight: 400;
+        .card-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #27ae60;
         }
 
-        .table-container {
-            margin-top: 30px;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            overflow: hidden;
-            background: white;
+        .card-value.danger {
+            color: #e74c3c;
         }
 
-        table {
+        .card-value.warning {
+            color: #f39c12;
+        }
+
+        .data-table {
             width: 100%;
             border-collapse: collapse;
-            background: white;
+            margin-bottom: 25px;
         }
 
-        thead {
-            background: #667eea;
-        }
-
-        thead th {
+        .data-table th {
+            background-color: #34495e;
             color: white;
-            font-weight: 600;
-            padding: 20px 15px;
+            padding: 12px 8px;
             text-align: left;
-            font-size: 14px;
-            letter-spacing: 0.5px;
-            border: none;
+            font-weight: bold;
+            border: 1px solid #2c3e50;
         }
 
-        tbody tr {
-            border-bottom: 1px solid #f1f5f9;
+        .data-table td {
+            padding: 10px 8px;
+            border: 1px solid #bdc3c7;
         }
 
-        tbody tr:nth-child(even) {
-            background: #f8fafc;
+        .data-table tr:nth-child(even) {
+            background-color: #f8f9fa;
         }
 
-        tbody tr:last-child {
-            border-bottom: none;
+        .data-table tr:hover {
+            background-color: #e8f4f8;
         }
 
-        tbody td {
-            padding: 18px 15px;
-            font-size: 14px;
-            color: #4a5568;
+        .text-right {
+            text-align: right;
         }
 
-        .product-name {
-            font-weight: 600;
-            color: #2d3748;
-            font-size: 15px;
-        }
-
-        .quantity-produced {
-            color: #4299e1;
-            font-weight: 600;
-        }
-
-        .quantity-sold {
-            color: #38a169;
-            font-weight: 600;
-        }
-
-        .quantity-waste {
-            color: #e53e3e;
-            font-weight: 600;
-        }
-
-        .weather {
-            background: #edf2f7;
-            color: #4a5568;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
+        .text-center {
             text-align: center;
-            border: 1px solid #e2e8f0;
-        }
-
-        .weather-sunny {
-            background: #fef5e7;
-            color: #c05621;
-            border-color: #f6ad55;
-        }
-
-        .weather-cloudy {
-            background: #f7fafc;
-            color: #4a5568;
-            border-color: #cbd5e0;
-        }
-
-        .weather-rainy {
-            background: #ebf8ff;
-            color: #2b6cb0;
-            border-color: #63b3ed;
-        }
-
-        .weather-partly-cloudy {
-            background: #f0fff4;
-            color: #276749;
-            border-color: #9ae6b4;
-        }
-
-        .date {
-            color: #718096;
-            font-size: 13px;
-            font-weight: 500;
         }
 
         .footer {
-            margin-top: 50px;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #bdc3c7;
             text-align: center;
-            color: #718096;
-            font-size: 12px;
-            border-top: 2px solid #e2e8f0;
-            padding: 25px 40px;
-            background: #f8fafc;
-            margin-left: -40px;
-            margin-right: -40px;
-        }
-
-        .footer p {
-            margin-bottom: 5px;
-        }
-
-        .info-badge {
-            background: #667eea;
-            color: white;
-            padding: 3px 8px;
-            border-radius: 12px;
             font-size: 10px;
-            font-weight: 600;
-            margin-left: 8px;
+            color: #7f8c8d;
         }
 
-        .section-title {
-            color: #2d3748;
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e2e8f0;
+        .page-break {
+            page-break-after: always;
         }
 
-        /* Dompdf için özel ayarlar */
+        /* Sayfa numarası için */
         @page {
-            margin: 15mm;
-        }
+            margin: 20mm;
 
-        /* Performans metrikleri için renkler */
-        .metric-excellent { color: #38a169; }
-        .metric-good { color: #4299e1; }
-        .metric-warning { color: #ed8936; }
-        .metric-danger { color: #e53e3e; }
+            @bottom-right {
+                content: "Sayfa " counter(page);
+                font-family: "DejaVu Sans Mono", monospace;
+                font-size: 10px;
+                color: #7f8c8d;
+            }
+        }
     </style>
 </head>
+@php
+    $totalAmount = 0;
+    $totalSales = 0;
+    $totalRemove = 0;
+    $totalErt = 0;
+@endphp
+@foreach ($reportData as $item)
+    @php
+        $totalAmount = $totalAmount + $item->total_amount;
+        $totalSales = $totalSales + $item->total_sales_amount;
+        $totalRemove = $totalRemove + $item->total_remove_amount;
+        $totalErt = $totalErt + $item->total_ert_count;
+    @endphp
+@endforeach
 
 <body>
-    <div class="container">
-        <div class="header">
-            <h1 class="main-title">smartBakery</h1>
-            <p class="subtitle">Atık Raporu</p>
+    <!-- Header Section -->
+    <div class="header">
+        <div class="company-logo">{{ $company->company_title ?? 'ŞIRKET ADI' }}</div>
+        <div class="company-info">
+            {{ $company->company_address ?? 'Şirket Adresi, İl/İlçe' }} |
+            Tel: {{ $company->company_phone ?? '+90 XXX XXX XX XX' }} |
         </div>
+        <div class="report-title">ÜRÜN SATIŞ VE ATIK RAPORU</div>
+    </div>
 
-        <div class="report-info">
-            <h3>Rapor Özeti</h3>
-            <p>Bu rapor, fırın işletmesinin atık raporunu, üretim verilerini ve hava durumu etkilerini kapsamlı bir şekilde analiz etmektedir.</p>
-            <p><strong>Rapor Tarihi:</strong> Başlangıç: {{ \Carbon\Carbon::parse($startDate)->format('d.m.Y') }} - Bitiş: {{ \Carbon\Carbon::parse($endDate)->format('d.m.Y') }}</p>
-        </div>
-
-        <div class="content">
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Ürün Adı</th>
-                            <th>Üretilen</th>
-                            <th>Satılan</th>
-                            <th>Atık</th>
-                            <th>Hava Durumu</th>
-                            <th>Tarih</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($reportData as $data)
-                            <tr>
-                                <td class="product-name">{{ $data->product->name }}</td>
-                                <td class="quantity-produced">{{ $data->amount }}</td>
-                                <td class="quantity-sold">{{ $data->current }}</td>
-                                <td class="quantity-waste">{{ $data->amount - $data->current }}</td>
-                                <td>
-                                    <span class="weather weather-sunny">{{ $data->weather->description }}</span>
-                                </td>
-                                <td class="date">{{ \Carbon\Carbon::parse($data->created_at)->format('d.m.Y H:i') }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+    <!-- Report Meta Information -->
+    <div class="report-meta">
+        <div class="meta-row">
+            <div class="meta-cell">
+                <div class="meta-label">Rapor Tarihi:</div>
+                <div class="meta-value">{{ $reportDate ?? date('d.m.Y H:i') }}</div>
+            </div>
+            <div class="meta-cell">
+                <div class="meta-label">Tarih Aralığı:</div>
+                <div class="meta-value">{{ $startDate ?? '01.01.2024' }} - {{ $endDate ?? '31.12.2024' }}</div>
             </div>
 
-            <div class="footer">
-                <p><strong>© {{ date('Y') }} smartBakery</strong> - Tüm hakları saklıdır.</p>
-                <p>Bu rapor sistem tarafından otomatik olarak oluşturulmuştur.</p>
-                <p>Detaylı analiz için sistem yöneticisi ile iletişime geçebilirsiniz.</p>
+        </div>
+    </div>
+
+    <!-- Summary Section -->
+    <div class="summary-section">
+        <div class="summary-title">ÖZET BİLGİLER</div>
+
+        <div class="summary-cards">
+            <div class="summary-card">
+                <div class="card-title">TOPLAM ÜRETİM</div>
+                <div class="card-value">{{ $totalAmount }} adet</div>
+            </div>
+            <div class="summary-card">
+                <div class="card-title">TOPLAM SATIŞ</div>
+                <div class="card-value">{{ $totalSales }} adet</div>
+            </div>
+            <div class="summary-card">
+                <div class="card-title">TOPLAM ATIK</div>
+                <div class="card-value danger">{{ $totalRemove }} adet</div>
             </div>
         </div>
+    </div>
+
+    <!-- Data Table -->
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th style="width: 5%;">#</th>
+                <th style="width: 25%;">Ürün Adı</th>
+                <th style="width: 15%;" class="text-right">Üretim</th>
+                <th style="width: 15%;" class="text-right">Satış</th>
+                <th style="width: 15%;" class="text-right">Atık</th>
+                <th style="width: 15%;" class="text-right">Ertesi Güne Devir</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach ($reportData as $item)
+                <tr>
+                    <th>
+                    <td>{{ $item->name }}</td>
+                    <td>{{ $item->total_amount }}</td>
+                    <td>{{ $item->total_sales_amount }}</td>
+                    <td>{{ $item->total_remove_amount }}</td>
+                    <td>{{ $item->total_ert_amount }}</td>
+                    </th>
+                </tr>
+            @endforeach
+
+        </tbody>
+    </table>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>Bu rapor {{ date('d.m.Y H:i') }} tarihinde sistem tarafından otomatik olarak oluşturulmuştur.</p>
+        <p>{{ $company->company_title ?? 'Şirket Adı' }} - Tüm hakları saklıdır.</p>
     </div>
 </body>
 

@@ -52,7 +52,6 @@ class GuessClass
 
             $totalSold = $data->sum('sales_amount');   // satılan
             $totalProduced = $data->sum('amount'); // üretilen
-            $totalAtik = $data->sum('remove_amount'); // atık
 
             // Ortalama satılan ve üretilen miktar
             $avgSold = round($totalSold / $count);
