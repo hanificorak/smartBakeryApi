@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-       DB::statement('ALTER TABLE `days_info` DROP COLUMN `rem_count`;');
+    //    DB::statement('ALTER TABLE `days_info` DROP COLUMN `rem_count`;');
     }
 
     /**
