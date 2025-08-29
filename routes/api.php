@@ -6,6 +6,7 @@ use App\Http\Controllers\DefinitionsController;
 use App\Http\Controllers\EndOfDayController;
 use App\Http\Controllers\GuessController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReinstallController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\UserController;
@@ -46,5 +47,9 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/company/getData',[CompanyController::class,'getData']);
     Route::post('/company/save',[CompanyController::class,'save']);
+
+    Route::post('/reinstall/start',[ReinstallController::class,'start']);
+    Route::post('/user/userChange',[AuthController::class,'userChange']);
+
     
 });

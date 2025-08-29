@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController
 {
@@ -24,7 +25,9 @@ class AuthController
             return ["status" => false, "message" => 'İşlem başarısız.' . $th->getMessage()];
         }
 
-        return ["status" => true, 'access_token' => $token];
+       $user_check = User::where('email',request()->get('email'))->first();
+     
+        return ["status" => true, 'access_token' => $token, 'admin_status' => $user_check->is_admin];
     }
 
     public function register(Request $request)
@@ -51,6 +54,30 @@ class AuthController
             return ["status" => true];
         } catch (\Throwable $th) {
             return ["status" => false, 'message' => $th->getMessage()];
+        }
+    }
+
+
+    public function userChange()
+    {
+        $user_id = request()->get('user_id');
+        $user = User::find($user_id);
+
+        if (! $user) {
+            return ["status" => false, "message" => "Kullanıcı bulunamadı"];
+        }
+
+        try {
+
+            $token = JWTAuth::fromUser($user);
+
+            return [
+                "status" => true,
+                "access_token" => $token,
+                "user" => $user
+            ];
+        } catch (\Throwable $th) {
+            return ["status" => false, "message" => "İşlem başarısız: " . $th->getMessage()];
         }
     }
 }
