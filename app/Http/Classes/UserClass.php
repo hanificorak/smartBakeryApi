@@ -23,7 +23,7 @@ class UserClass
         $rs = new ResultClass();
         try {
 
-            $rs->obj = User::where('firm_id', Auth::user()->firm_id)->whereNot('is_admin',0)->get();
+            $rs->obj = User::where('firm_id', Auth::user()->firm_id)->where('is_admin',0)->get();
             $rs->status = true;
         } catch (\Throwable $th) {
             return ["status" => false, 'message' => $th->getMessage()];
