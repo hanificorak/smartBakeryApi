@@ -25,37 +25,40 @@ class AuthController
             return ["status" => false, "message" => 'İşlem başarısız.' . $th->getMessage()];
         }
 
-       $user_check = User::where('email',request()->get('email'))->first();
-     
+        $user_check = User::where('email', request()->get('email'))->first();
+
         return ["status" => true, 'access_token' => $token, 'admin_status' => $user_check->is_admin];
     }
 
-    public function register(Request $request)
-    {
-        try {
+  public function register(Request $request)
+{
+    try {
+        $name = $request->input('name');
+        $email = $request->input('email');
+        $password = $request->input('password');
+        $firm_id = $request->input('firm_id');
 
-            $name = request()->get('name');
-            $email = request()->get('email');
-            $password = request()->get('password');
-            $firm_id = request()->get('firm_id');
-
-            if ($firm_id == null) {
-                $firm_id = DB::table('users')->max('id') + 1;
-            }
-
-            $user = User::create([
-                'email' => $email,
-                'name' => $name,
-                'firm_id' => $firm_id,
-                'password' => Hash::make($password),
-            ]);
-
-
-            return ["status" => true];
-        } catch (\Throwable $th) {
-            return ["status" => false, 'message' => $th->getMessage()];
+        // Eğer firm_id null ise, yeni bir firm_id oluştur
+        if ($firm_id == null) {
+            $firm_id = DB::table('users')->max('id') + 1;
         }
+
+        // User modelinin yeni bir örneğini oluştur
+        $user = new User();
+        $user->name = $name;
+        $user->email = $email;
+        $user->password = Hash::make($password);
+        $user->firm_id = $firm_id; // firm_id'yi doğru şekilde atayın
+
+        // Veriyi kaydet
+        $user->save();
+
+        return ["status" => true, "user_id" => $user->id];
+    } catch (\Throwable $th) {
+        return ["status" => false, 'message' => $th->getMessage()];
     }
+}
+
 
 
     public function userChange()

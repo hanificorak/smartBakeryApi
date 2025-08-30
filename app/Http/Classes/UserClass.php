@@ -44,6 +44,7 @@ class UserClass
 
 
             $mdl = new User();
+            $mdl->create_user_id = Auth::user()->id;
             $mdl->email = $email;
             $mdl->name = $name;
             $mdl->firm_id = $firm_id;
