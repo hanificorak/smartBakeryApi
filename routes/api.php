@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DefinitionsController;
 use App\Http\Controllers\EndOfDayController;
+use App\Http\Controllers\FreezerController;
 use App\Http\Controllers\GuessController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReinstallController;
@@ -50,6 +51,11 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/reinstall/start',[ReinstallController::class,'start']);
     Route::post('/user/userChange',[AuthController::class,'userChange']);
+
+    Route::post('/freezer/getData',[FreezerController::class,'getData']);
+    Route::post('/freezer/save',[FreezerController::class,'save']);
+    Route::post('/freezer/delete',[FreezerController::class,'delete']);
+    Route::post('/freezer/createReport',[FreezerController::class,'createReport']);
 
     
 });
