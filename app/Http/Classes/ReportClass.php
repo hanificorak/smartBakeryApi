@@ -138,6 +138,7 @@ class ReportClass
                 DB::raw('SUM(days_info.ert_count) as total_ert_amount')
             )
                 ->join('days_info', 'days_info.product_id', '=', 'products.id')
+                ->where('products.firm_id',Auth::user()->firm_id)
                 ->groupBy('products.id', 'products.name');
 
 
