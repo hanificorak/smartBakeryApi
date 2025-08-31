@@ -60,14 +60,23 @@ class StockClass
         return $rs;
     }
 
-    public function saveStock()
+    public function saveStock($product_id = null, $amount = null, $desc = null)
     {
         $rs = new ResultClass();
         try {
 
-            $product_id = request()->get('product_id');
-            $amount = request()->get('amount');
-            $desc = request()->get('desc');
+            if ($product_id == null) {
+                $product_id = request()->get('product_id');
+            }
+            
+            if ($amount == null) {
+                $amount = request()->get('amount');
+            }
+            
+            if ($desc == null) {
+                $desc = request()->get('desc');
+            }
+
 
             $mdl = new DaysStocks();
             $mdl->created_at = Carbon::now();

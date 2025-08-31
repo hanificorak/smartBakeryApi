@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Classes\LastStockClass;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DefinitionsController;
 use App\Http\Controllers\EndOfDayController;
 use App\Http\Controllers\FreezerController;
 use App\Http\Controllers\GuessController;
+use App\Http\Controllers\LastStockController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReinstallController;
 use App\Http\Controllers\ReportController;
@@ -42,6 +44,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/profile/updateProfile', [ProfileController::class, 'updateProfile']);
     Route::post('/profile/updatePassword', [ProfileController::class, 'updatePassword']);
+    Route::post('/profile/getProfileData', [ProfileController::class, 'getProfileData']);
 
     Route::post('/users/addUser', [UserController::class, 'addUser']);
     Route::post('/users/getUsers', [UserController::class, 'getUsers']);
@@ -57,5 +60,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/freezer/delete',[FreezerController::class,'delete']);
     Route::post('/freezer/createReport',[FreezerController::class,'createReport']);
 
+    Route::post('/laststock/getData',[LastStockController::class,'getData']);
+    Route::post('/laststock/save',[LastStockController::class,'save']);
     
 });

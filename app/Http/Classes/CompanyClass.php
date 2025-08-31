@@ -43,10 +43,19 @@ class CompanyClass
 
 
             $item = Settings::where('firm_id',Auth::user()->firm_id)->select('id')->first();
+            if($item == null){
+                $mdl = new Settings();
+                $mdl->create_user_id = Auth::user()->id;
+                $mdl->created_at = Carbon::now();
+                $mdl->updated_at = null;
+                $mdl->firm_id = Auth::user()->firm_id;
+            }else{
+                $mdl = Settings::find($item->id);
+                $mdl->update_user_id = Auth::user()->id;
+                $mdl->updated_at = Carbon::now();
+            }
 
-            $mdl = Settings::find($item->id);
-            $mdl->update_user_id = Auth::user()->id;
-            $mdl->updated_at = Carbon::now();
+            
             $mdl->company_title = $title;
             $mdl->company_address = $address;
             $mdl->company_phone = $phone;

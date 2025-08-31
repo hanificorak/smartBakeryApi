@@ -70,4 +70,18 @@ class ProfileClass
         }
         return $rs;
     }
+
+    public function getProfileData()
+    {
+        $rs = new ResultClass();
+        try {
+
+            $rs->status = true;
+            $rs->obj = Auth::user();
+        } catch (\Throwable $th) {
+            $rs->status = false;
+            $rs->message = $th->getMessage();
+        }
+        return $rs;
+    }
 }

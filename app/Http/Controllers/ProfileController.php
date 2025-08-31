@@ -29,4 +29,12 @@ class ProfileController
         }
     }
 
+    public function getProfileData()
+    {
+        try {
+            return response()->json($this->class->getProfileData());
+        } catch (\Throwable $th) {
+        }
+    }
+
 }

@@ -23,7 +23,7 @@ class UserClass
         $rs = new ResultClass();
         try {
 
-            $rs->obj = User::where('firm_id', Auth::user()->firm_id)->where('is_admin',0)->get();
+            $rs->obj = User::where('firm_id', Auth::user()->firm_id)->get();
             $rs->status = true;
         } catch (\Throwable $th) {
             return ["status" => false, 'message' => $th->getMessage()];
@@ -38,17 +38,22 @@ class UserClass
             $name = request()->get('name');
             $email = request()->get('email');
             $password = request()->get('password');
-
+            $id = request()->get('id');
 
             $firm_id = Auth::user()->firm_id;
 
+            if ($id == null) {
+                $mdl = new User();
+                $mdl->create_user_id = Auth::user()->id;
+                $mdl->password =  Hash::make($password);
+            }else{
+                $mdl = User::find($id);
+                $mdl->updated_at = Carbon::now();
+            }
 
-            $mdl = new User();
-            $mdl->create_user_id = Auth::user()->id;
             $mdl->email = $email;
             $mdl->name = $name;
             $mdl->firm_id = $firm_id;
-            $mdl->password =  Hash::make($password);
 
 
             $mdl->save();
@@ -59,6 +64,4 @@ class UserClass
             return ["status" => false, 'message' => $th->getMessage()];
         }
     }
-
-
 }

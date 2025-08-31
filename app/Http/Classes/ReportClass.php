@@ -125,6 +125,8 @@ class ReportClass
             $weather = request()->get('weather');
             $dateRange = request()->get('date');
             $mail = request()->get('mail');
+            $hiddenProd = request()->get('hiddenProd');
+
 
             $query = Products::select(
                 'products.id',
@@ -137,12 +139,17 @@ class ReportClass
                 ->join('days_info', 'days_info.product_id', '=', 'products.id')
                 ->groupBy('products.id', 'products.name');
 
+
             if ($productId != null) {
                 $query->where('products.id', $productId);
             }
 
             if ($weather != null) {
                 $query->where('days_info.weather_code', $weather);
+            }
+
+            if (count($hiddenProd) > 0) {
+                $query->whereNotIn('products.id', $hiddenProd);
             }
 
             $startDate = null;
@@ -208,6 +215,7 @@ class ReportClass
 
     public function dayreport()
     {
+
         $rs = new ResultClass();
         try {
             $product = request()->get('product');
@@ -216,10 +224,17 @@ class ReportClass
             $mail = request()->get('mail');
             $startDateFilter = request()->get('startDate');
             $endDateFilter = request()->get('endDate');
+            $hiddenProd = request()->get('hiddenProd');
+            $weatherView = request()->get('weatherView');
+            $type = request()->get('type');
 
 
             $queryBase = DaysInfo::with(['product', 'weather'])
                 ->where('firm_id', Auth::user()->firm_id);
+
+            if (count($hiddenProd) > 0) {
+                $queryBase->whereNotIn('product_id', $hiddenProd);
+            }
 
             if ($product != null) {
                 $queryBase->where('product_id', $product);
@@ -228,6 +243,7 @@ class ReportClass
             if ($weather != null) {
                 $queryBase->where('weather_code', $weather);
             }
+
 
             $startDate = null;
             $endDate = null;
@@ -243,6 +259,7 @@ class ReportClass
                     break;
 
                 case 'month':
+                case 'all':
                     $startDate = Carbon::now()->startOfMonth();
                     $endDate = Carbon::now()->endOfMonth();
                     break;
@@ -274,6 +291,8 @@ class ReportClass
                 ];
             }
 
+
+
             // Reports klasörü oluştur (yoksa)
             $reportPath = public_path('reports');
             if (!file_exists($reportPath)) {
@@ -292,14 +311,20 @@ class ReportClass
                 'dailyReports' => $dailyReports,
                 'startDate' => $startDate,
                 'endDate' => $endDate,
-                'company'=>$company
+                'company' => $company,
+                'weather_view' => $weatherView
             ]);
 
             $pdf->setPaper('A4', 'portrait');
             $pdf->save($fullPath);
 
             $url = url('reports/' . $randomFileName);
-            Mail::to([$mail])->send(new ReportMail($url, $startDate, $endDate));
+
+            if ($type == "mail") {
+                Mail::to($mail)->send(new ReportMail($url, $startDate, $endDate));
+            }else{
+                $rs->sub_info = $url;
+            }
 
             $rs->status = true;
             $rs->message = "OK";

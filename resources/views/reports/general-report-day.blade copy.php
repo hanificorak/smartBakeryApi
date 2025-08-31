@@ -29,7 +29,9 @@
             background: white;
             min-height: auto;
             max-height: 297mm;
+            /* A4 height */
             width: 210mm;
+            /* A4 width */
             margin: 0 auto;
             position: relative;
             padding-bottom: 50px;
@@ -39,6 +41,11 @@
             overflow: hidden;
         }
 
+        .container:last-child {
+            page-break-after: auto;
+        }
+
+        /* Header Styles */
         .header {
             background: #2d3748;
             color: white;
@@ -50,6 +57,11 @@
 
         .header-content {
             display: table;
+        }
+
+        .company-info {
+            /* display: table-cell;
+            vertical-align: middle; */
         }
 
         .company-info h1 {
@@ -65,6 +77,26 @@
             margin: 0;
         }
 
+        .report-date {
+            background: #4a5568;
+            padding: 15px;
+            border-radius: 6px;
+            float: right;
+        }
+
+        .report-date h3 {
+            font-size: 18px;
+            margin: 0 0 3px 0;
+            color: #ffffff;
+        }
+
+        .report-date p {
+            font-size: 12px;
+            color: #cbd5e0;
+            margin: 0;
+        }
+
+        /* Summary Section */
         .summary-section {
             background: #f8fafc;
             padding: 30px 40px;
@@ -142,26 +174,44 @@
             margin: 0;
         }
 
+        .stat-card.production .number {
+            color: #38a169;
+        }
+
+        .stat-card.sales .number {
+            color: #3182ce;
+        }
+
+        .stat-card.waste .number {
+            color: #e53e3e;
+        }
+
+        .stat-card.carry .number {
+            color: #d69e2e;
+        }
+
+        /* Content Styles */
         .content {
-            padding: 10px 20px;
+            padding: 20px 40px;
         }
 
         .section-title {
             font-size: 14px;
             color: #2d3748;
-            margin-bottom: 8px;
+            margin-bottom: 15px;
             font-weight: 600;
             border-bottom: 2px solid #3182ce;
             padding-bottom: 5px;
             display: inline-block;
         }
 
+        /* Table Styles */
         .table-container {
             background: white;
             border: 2px solid #e2e8f0;
             border-radius: 0;
             overflow: hidden;
-            margin: 10px 0;
+            margin: 20px 0;
         }
 
         table {
@@ -176,7 +226,7 @@
 
         thead th {
             color: white;
-            padding: 8px 4px;
+            padding: 15px 10px;
             font-size: 12px;
             text-align: center;
             font-weight: 700;
@@ -190,7 +240,7 @@
         }
 
         tbody td {
-            padding: 7px 5px;
+            padding: 12px 10px;
             font-size: 12px;
             text-align: center;
             border-bottom: 1px solid #e2e8f0;
@@ -201,10 +251,19 @@
             border-right: none;
         }
 
+        tbody tr {
+            background: white;
+        }
+
         tbody tr:nth-child(even) {
             background: #f8fafc;
         }
 
+        tbody tr:nth-child(odd) {
+            background: white;
+        }
+
+        /* Product name styling */
         .product-name {
             font-weight: 600;
             color: #2d3748;
@@ -212,6 +271,7 @@
             max-width: 120px;
         }
 
+        /* Quantity styling */
         .quantity-produced {
             color: #38a169;
             font-weight: 600;
@@ -232,6 +292,7 @@
             font-weight: 600;
         }
 
+        /* Weather styling */
         .weather {
             background: #edf2f7;
             padding: 4px 8px;
@@ -246,21 +307,7 @@
             font-size: 10px;
         }
 
-        .totals-summary {
-            display: table;
-            width: 100%;
-            margin-top: 10px;
-            font-size: 12px;
-        }
-
-        .totals-summary div {
-            display: table-cell;
-            text-align: center;
-            padding: 10px;
-            border: 1px solid #e2e8f0;
-            font-weight: 600;
-        }
-
+        /* Footer Styles */
         .footer {
             position: absolute;
             bottom: 0;
@@ -274,17 +321,118 @@
             box-sizing: border-box;
         }
 
+        .footer p {
+            margin: 2px 0;
+        }
+
         .footer .company-name {
             font-weight: 700;
             color: #90cdf4;
         }
 
+        /* Page break */
+        .page-break {
+            page-break-after: always;
+            height: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Empty state styling */
         .empty-state {
             text-align: center;
             color: #a0aec0;
             font-style: italic;
             padding: 30px 0;
             font-size: 12px;
+        }
+
+        /* Responsive adjustments for PDF */
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            body {
+                font-size: 11px;
+                margin: 0;
+                padding: 0;
+            }
+
+            .container {
+                width: 100%;
+                min-height: auto;
+                box-shadow: none;
+                margin: 0;
+            }
+
+            .header-content {
+                display: block;
+            }
+
+            .company-info,
+            .report-date {
+                display: block;
+                width: 100%;
+                text-align: left;
+                margin-bottom: 15px;
+                float: right;
+            }
+
+            .summary-grid {
+                display: block;
+            }
+
+            .summary-info,
+            .stats-cards {
+                display: block;
+                width: 100%;
+                padding: 0;
+                margin-bottom: 20px;
+            }
+
+            .stats-grid {
+                display: block;
+            }
+
+            .stat-row {
+                display: block;
+                margin-bottom: 10px;
+            }
+
+            .stat-card {
+                display: inline-block;
+                width: 22%;
+                margin-right: 2%;
+                vertical-align: top;
+            }
+        }
+
+        /* Utility classes */
+        .text-success {
+            color: #38a169;
+        }
+
+        .text-warning {
+            color: #d69e2e;
+        }
+
+        .text-danger {
+            color: #e53e3e;
+        }
+
+        .text-info {
+            color: #3182ce;
+        }
+
+        .font-bold {
+            font-weight: 700;
+        }
+
+        .text-center {
+            text-align: center;
         }
     </style>
 </head>
@@ -299,56 +447,51 @@
                         <h1>{{ $company->company_title }}</h1>
                         <p>{{ $company->company_address }} - {{ $company->company_phone }}</p>
                     </div>
+
                 </div>
             </div>
-                      <div class="totals-summary">
-                        <div>Atık Oranı: {{ number_format(($day['data']->sum('remove_amount') / max($day['data']->sum('amount'), 1)) * 100, 1) }}%</div>
-                        <div>Satış Oranı: {{ number_format(($day['data']->sum('sales_amount') / max($day['data']->sum('amount'), 1)) * 100, 1) }}%</div>
-                        <div>Devir Oranı:  {{ number_format(($day['data']->sum('ert_count') / max($day['data']->sum('amount'), 1)) * 100, 1) }}%</div>
-                        <div>Atık/Satış: {{ number_format(($day['data']->sum('remove_amount') / max($day['data']->sum('sales_amount'), 1)) * 100, 1) }}%</div>
-                    </div>
+
             <!-- Summary Section -->
-            {{-- <div class="summary-section">
+            <div class="summary-section">
                 <div class="summary-grid">
                     <div class="summary-info">
-                        <h3 style="font-size:16px; margin-bottom:8px;">Rapor Özeti</h3>
+                        <h3>Rapor Özeti</h3>
+                        <p><strong>Tarih:</strong> {{ $day['date'] }}</p>
+                        <p>Bu rapor {{ $day['date'] }} tarihine ait üretim, satış, atık ve stok devir verilerini
+                            içermektedir.
+                            Hava durumu bilgileri ile birlikte analiz edilebilecek detaylı veriler sunulmaktadır.</p>
                     </div>
                     <div class="stats-cards">
                         <div class="stats-grid">
                             <div class="stat-row">
-                                <div class="stat-card" style="padding:8px 6px; border-radius:6px;">
-                                    <div class="number" style="font-size:16px;">
-                                        {{ number_format(($day['data']->sum('remove_amount') / max($day['data']->sum('amount'), 1)) * 100, 1) }}%
-                                    </div>
-                                    <div class="label" style="font-size:10px;">Atık Oranı</div>
+                                <div class="stat-card production">
+                                    <div class="number">{{ $day['data']->sum('amount') }}</div>
+                                    <div class="label">Toplam Üretim</div>
                                 </div>
-                                <div class="stat-card" style="padding:8px 6px; border-radius:6px;">
-                                    <div class="number" style="font-size:16px;">
-                                        {{ number_format(($day['data']->sum('sales_amount') / max($day['data']->sum('amount'), 1)) * 100, 1) }}%
-                                    </div>
-                                    <div class="label" style="font-size:10px;">Satış Oranı</div>
+                                <div class="stat-card sales">
+                                    <div class="number">{{ $day['data']->sum('sales_amount') }}</div>
+                                    <div class="label">Toplam Satış</div>
                                 </div>
-                                <div class="stat-card" style="padding:8px 6px; border-radius:6px;">
-                                    <div class="number" style="font-size:16px;">
-                                        {{ number_format(($day['data']->sum('ert_count') / max($day['data']->sum('amount'), 1)) * 100, 1) }}%
-                                    </div>
-                                    <div class="label" style="font-size:10px;">Devir Oranı</div>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-card waste">
+                                    <div class="number">{{ $day['data']->sum('remove_amount') }}</div>
+                                    <div class="label">Toplam Atık</div>
                                 </div>
-                                <div class="stat-card" style="padding:8px 6px; border-radius:6px;">
-                                    <div class="number" style="font-size:16px;">
-                                        {{ number_format(($day['data']->sum('remove_amount') / max($day['data']->sum('sales_amount'), 1)) * 100, 1) }}%
-                                    </div>
-                                    <div class="label" style="font-size:10px;">Atık/Satış</div>
+                                <div class="stat-card carry">
+                                    <div class="number">{{ $day['data']->sum('ert_count') }}</div>
+                                    <div class="label">Ertesi Güne</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div> --}}
+            </div>
 
             <!-- Content Section -->
             <div class="content">
                 <h2 class="section-title">Detaylı Ürün Analizi</h2>
+
                 <div class="table-container">
                     <table>
                         <thead>
@@ -357,7 +500,7 @@
                                 <th style="width: 12%;">Üretilen</th>
                                 <th style="width: 12%;">Satılan</th>
                                 <th style="width: 12%;">Atık</th>
-                                <th style="width: 12%;">Ertesi G.</th>
+                                <th style="width: 12%;">Ertesi Güne</th>
                                 @if ($weather_view == 'view')
                                     <th style="width: 15%;">Hava Durumu</th>
                                 @endif
@@ -373,14 +516,19 @@
                                     <td class="quantity-waste">{{ number_format($data->remove_amount) }}</td>
                                     <td class="quantity-carry">{{ number_format($data->ert_count) }}</td>
                                     @if ($weather_view == 'view')
-                                        <td><span class="weather">{{ $data->weather->description }}</span></td>
+                                        <td>
+                                            <span class="weather">{{ $data->weather->description }}</span>
+                                        </td>
                                     @endif
+
                                     <td class="date">
-                                        {{ \Carbon\Carbon::parse($data->created_at)->format('d.m.Y H:i') }}</td>
+                                        {{ \Carbon\Carbon::parse($data->created_at)->format('d.m.Y H:i') }}
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="empty-state">Bu tarih için kayıtlı veri bulunmamaktadır
+                                    <td colspan="7" class="empty-state">
+                                        Bu tarih için kayıtlı veri bulunmamaktadır
                                     </td>
                                 </tr>
                             @endforelse
@@ -388,13 +536,25 @@
                     </table>
                 </div>
 
-                <!-- Toplam Rakamlar Tablo Altında -->
                 @if ($day['data']->count() > 0)
-                    <div class="totals-summary">
-                        <div>Toplam Üretim: {{ $day['data']->sum('amount') }}</div>
-                        <div>Toplam Satış: {{ $day['data']->sum('sales_amount') }}</div>
-                        <div>Toplam Atık: {{ $day['data']->sum('remove_amount') }}</div>
-                        <div>Ertesi Güne: {{ $day['data']->sum('ert_count') }}</div>
+                    <div
+                        style="margin-top: 15px; padding: 12px; background: #f7fafc; border-radius: 6px; border-left: 4px solid #3182ce;">
+                        <h4 style="color: #2d3748; margin-bottom: 6px; font-size: 12px; font-weight: 600;">Günlük Özet:
+                        </h4>
+                        <div style="display: table; width: 100%; font-size: 10px;">
+                            <div style="display: table-cell; width: 33.33%; color: #4a5568;">
+                                <strong>Atık Oranı:</strong>
+                                %{{ number_format(($day['data']->sum('remove_amount') / max($day['data']->sum('amount'), 1)) * 100, 1) }}
+                            </div>
+                            <div style="display: table-cell; width: 33.33%; color: #4a5568;">
+                                <strong>Satış Oranı:</strong>
+                                %{{ number_format(($day['data']->sum('sales_amount') / max($day['data']->sum('amount'), 1)) * 100, 1) }}
+                            </div>
+                            <div style="display: table-cell; width: 33.33%; color: #4a5568;">
+                                <strong>Devir Oranı:</strong>
+                                %{{ number_format(($day['data']->sum('ert_count') / max($day['data']->sum('amount'), 1)) * 100, 1) }}
+                            </div>
+                        </div>
                     </div>
                 @endif
             </div>
@@ -405,6 +565,11 @@
                 <p>Bu rapor sistem tarafından otomatik olarak {{ date('d.m.Y H:i') }} tarihinde oluşturulmuştur.</p>
             </div>
         </div>
+
+        {{-- Her gün yeni sayfa, son gün hariç --}}
+        @unless ($loop->last)
+            <!-- Sayfa sonu zorlaması -->
+        @endunless
     @endforeach
 </body>
 
