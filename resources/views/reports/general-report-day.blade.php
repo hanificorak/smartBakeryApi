@@ -295,9 +295,10 @@
             <!-- Header Section -->
             <div class="header">
                 <div class="header-content">
-                    <div class="company-info">
+                    <div class="company-info">  
                         <h1>{{ $company->company_title }}</h1>
                         <p>{{ $company->company_address }} - {{ $company->company_phone }}</p>
+                        <p>Rapor Tarihi: {{ $day['date'] }}</p>
                     </div>
                 </div>
             </div>
