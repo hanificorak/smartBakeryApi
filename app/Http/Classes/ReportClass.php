@@ -126,6 +126,7 @@ class ReportClass
             $dateRange = request()->get('date');
             $mail = request()->get('mail');
             $hiddenProd = request()->get('hiddenProd');
+            $type = request()->get('type');
 
 
             $query = Products::select(
@@ -201,7 +202,11 @@ class ReportClass
             $pdf->save($fullPath);
 
             $url = url('reports/' . $randomFileName);
-            Mail::to([$mail])->send(new ReportMail($url, $startDate, $endDate));
+       if ($type == "mail") {
+                Mail::to($mail)->send(new ReportMail($url, $startDate, $endDate));
+            }else{
+                $rs->sub_info = "https://docs.google.com/gview?embedded=true&url=$url";
+            }
 
             $rs->status = true;
             $rs->message = "OK";
