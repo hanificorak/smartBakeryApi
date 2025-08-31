@@ -126,7 +126,7 @@ class ReportClass
             $dateRange = request()->get('date');
             $mail = request()->get('mail');
             $hiddenProd = request()->get('hiddenProd');
-            $type = request()->get('type');
+            $type_dt = request()->get('type_dt');
 
 
             $query = Products::select(
@@ -202,7 +202,7 @@ class ReportClass
             $pdf->save($fullPath);
 
             $url = url('reports/' . $randomFileName);
-       if ($type == "mail") {
+       if ($type_dt == "mail") {
                 Mail::to($mail)->send(new ReportMail($url, $startDate, $endDate));
             }else{
                 $rs->sub_info = "https://docs.google.com/gview?embedded=true&url=$url";
@@ -231,7 +231,7 @@ class ReportClass
             $endDateFilter = request()->get('endDate');
             $hiddenProd = request()->get('hiddenProd');
             $weatherView = request()->get('weatherView');
-            $type = request()->get('type');
+            $type_dt = request()->get('type_dt');
 
 
             $queryBase = DaysInfo::with(['product', 'weather'])
@@ -325,7 +325,7 @@ class ReportClass
 
             $url = url('reports/' . $randomFileName);
 
-            if ($type == "mail") {
+            if ($type_dt == "mail") {
                 Mail::to($mail)->send(new ReportMail($url, $startDate, $endDate));
             }else{
                 $rs->sub_info = "https://docs.google.com/gview?embedded=true&url=$url";
