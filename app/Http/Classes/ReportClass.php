@@ -323,7 +323,7 @@ class ReportClass
             if ($type == "mail") {
                 Mail::to($mail)->send(new ReportMail($url, $startDate, $endDate));
             }else{
-                $rs->sub_info = $url;
+                $rs->sub_info = "https://docs.google.com/gview?embedded=true&url=$url";
             }
 
             $rs->status = true;
