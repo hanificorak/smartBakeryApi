@@ -49,6 +49,22 @@ class UserController
         }
     }
 
+    public function getWaitData()
+    {
+        try {
+           return response()->json($this->class->getWaitData());
+        } catch (\Throwable $th) {
+        }
+    }
+
+    public function approve()
+    {
+        try {
+           return response()->json($this->class->approve());
+        } catch (\Throwable $th) {
+        }
+    }
+
    
 
 }

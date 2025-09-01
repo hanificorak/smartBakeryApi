@@ -21,4 +21,12 @@ class GuessController
         }
     }
 
+    public function totalGuessPdfMail()
+    {
+        try {
+            return response()->json($this->class->totalGuessPdfMail());
+        } catch (\Throwable $th) {
+        }
+    }
+
 }

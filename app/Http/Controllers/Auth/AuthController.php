@@ -26,38 +26,44 @@ class AuthController
         }
 
         $user_check = User::where('email', request()->get('email'))->first();
-
-        return ["status" => true, 'access_token' => $token, 'admin_status' => $user_check->is_admin];
-    }
-
-  public function register(Request $request)
-{
-    try {
-        $name = $request->input('name');
-        $email = $request->input('email');
-        $password = $request->input('password');
-        $firm_id = $request->input('firm_id');
-
-        // Eğer firm_id null ise, yeni bir firm_id oluştur
-        if ($firm_id == null) {
-            $firm_id = DB::table('users')->max('id') + 1;
+        if ($user_check->admin_onay == 0) {
+            return ["status" => false, 'is_onay' => false, 'user_status' => false];
+        }
+        if ($user_check->status == 0) {
+            return ["status" => false, 'user_status' => false,'is_onay'=>true];
         }
 
-        // User modelinin yeni bir örneğini oluştur
-        $user = new User();
-        $user->name = $name;
-        $user->email = $email;
-        $user->password = Hash::make($password);
-        $user->firm_id = $firm_id; // firm_id'yi doğru şekilde atayın
-
-        // Veriyi kaydet
-        $user->save();
-
-        return ["status" => true, "user_id" => $user->id];
-    } catch (\Throwable $th) {
-        return ["status" => false, 'message' => $th->getMessage()];
+        return ["status" => true, 'access_token' => $token, 'admin_status' => $user_check->is_admin, 'is_onay' => true, 'user_status' => true];
     }
-}
+
+    public function register(Request $request)
+    {
+        try {
+            $name = $request->input('name');
+            $email = $request->input('email');
+            $password = $request->input('password');
+            $firm_id = $request->input('firm_id');
+
+            // Eğer firm_id null ise, yeni bir firm_id oluştur
+            if ($firm_id == null) {
+                $firm_id = DB::table('users')->max('id') + 1;
+            }
+
+            // User modelinin yeni bir örneğini oluştur
+            $user = new User();
+            $user->name = $name;
+            $user->email = $email;
+            $user->password = Hash::make($password);
+            $user->firm_id = $firm_id; // firm_id'yi doğru şekilde atayın
+
+            // Veriyi kaydet
+            $user->save();
+
+            return ["status" => true, "user_id" => $user->id];
+        } catch (\Throwable $th) {
+            return ["status" => false, 'message' => $th->getMessage()];
+        }
+    }
 
 
 

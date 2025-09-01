@@ -39,6 +39,8 @@ class UserClass
             $email = request()->get('email');
             $password = request()->get('password');
             $id = request()->get('id');
+            $perm = request()->get('perm');
+            $status = request()->get('status');
 
             $firm_id = Auth::user()->firm_id;
 
@@ -46,7 +48,7 @@ class UserClass
                 $mdl = new User();
                 $mdl->create_user_id = Auth::user()->id;
                 $mdl->password =  Hash::make($password);
-            }else{
+            } else {
                 $mdl = User::find($id);
                 $mdl->updated_at = Carbon::now();
             }
@@ -54,6 +56,8 @@ class UserClass
             $mdl->email = $email;
             $mdl->name = $name;
             $mdl->firm_id = $firm_id;
+            $mdl->is_admin = $perm;
+            $mdl->status = $status;
 
 
             $mdl->save();
@@ -63,5 +67,36 @@ class UserClass
         } catch (\Throwable $th) {
             return ["status" => false, 'message' => $th->getMessage()];
         }
+    }
+
+    public function getWaitData()
+    {
+        $rs = new ResultClass();
+        try {
+
+            $rs->obj = User::where('firm_id', Auth::user()->firm_id)->where('admin_onay', 0)->get();
+            $rs->status = true;
+        } catch (\Throwable $th) {
+            return ["status" => false, 'message' => $th->getMessage()];
+        }
+        return $rs;
+    }
+    public function approve()
+    {
+        $rs = new ResultClass();
+        try {
+
+            $user_id = request()->get('id');
+
+            $mdl = User::find($user_id);
+            $mdl->admin_onay = 1;
+
+            $mdl->save();
+            $rs->status = true;
+        
+        } catch (\Throwable $th) {
+            return ["status" => false, 'message' => $th->getMessage()];
+        }
+        return $rs;
     }
 }

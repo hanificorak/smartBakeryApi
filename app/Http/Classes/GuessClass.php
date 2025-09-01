@@ -19,12 +19,17 @@ class GuessClass
 {
 
 
-    public function getData()
+    public function getData($weather = null, $product_id = null)
     {
         $rs = new ResultClass();
         try {
-            $weather = request()->get('weather_code'); // Bugünün hava durumu
-            $product_id = request()->get('product_id');
+
+            if ($weather == null) {
+                $weather = request()->get('weather_code'); // Bugünün hava durumu
+            }
+            if ($product_id == null) {
+                $product_id = request()->get('product_id');
+            }
             $date = Carbon::now();
 
             // Gün ismi (örn: Pazartesi)
@@ -45,7 +50,7 @@ class GuessClass
                 $rs->obj = [
                     'weather' => $weather,
                     'day' => $dayName,
-                    'message' => "Bugün için geçmiş veri bulunamadı. Hava durumu: {$weather}, gün: {$dayName}."
+                    'message' => "Bugün için geçmiş veri bulunamadı."
                 ];
                 return $rs;
             }
@@ -74,9 +79,53 @@ class GuessClass
                 'average_diff' => $avgDiff,
                 'suggested_production' => $suggestedProduction, // tahmini üretim sayısı
                 'product' => $product_info->name, // tahmini üretim sayısı
-                // 'message' => "Bugün {$dayName}. Hava: {$weather}. Geçmişte ortalama {$avgProduced} üretip {$avgSold} satmışsın. 
-                //               Bugün yaklaşık {$suggestedProduction} adet üretmen önerilir."
+                'message' => "Bugün {$dayName}. Hava: {$weather_item->description}. Geçmişte ortalama {$avgProduced} üretip {$avgSold} satmışsın. 
+                              Bugün yaklaşık {$suggestedProduction} adet üretmen önerilir."
             ];
+        } catch (\Throwable $th) {
+            $rs->status = false;
+            $rs->message = $th->getMessage();
+        }
+
+        return $rs;
+    }
+
+    public function totalGuessPdfMail()
+    {
+        $rs = new ResultClass();
+        try {
+
+            $weather = request()->get('weather');
+            $email = request()->get('email');
+
+
+            $products = Products::where('firm_id', Auth::user()->firm_id)->get();
+            $datas = [];
+            foreach ($products as $key => $value) {
+                $product_id = $value->id;
+                $result = $this->getData($weather, $product_id);
+                $msg = $result->obj['message'];
+                $prod_name = $value->name;
+
+                array_push($datas, ["msg" => $msg, "prod_name" => $prod_name]);
+            }
+
+            $reportPath = public_path('reports');
+            if (!file_exists($reportPath)) {
+                mkdir($reportPath, 0755, true);
+            }
+            $randomFileName = 'uretim-rapor-' . uniqid() . '-' . date('Ymd-His') . '.pdf';
+            $fullPath = $reportPath . '/' . $randomFileName;
+            $pdf = Pdf::loadView('reports.guess-report', compact('datas'));
+            $pdf->setPaper('A4', 'portrait');
+            $pdf->save($fullPath);
+
+            $url = url('reports/' . $randomFileName);
+            Mail::to([$email])->send(new ReportMail($url));
+
+
+            $rs->status = true;
+            $rs->message = "OK";
         } catch (\Throwable $th) {
             $rs->status = false;
             $rs->message = $th->getMessage();

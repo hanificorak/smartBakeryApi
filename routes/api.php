@@ -41,6 +41,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/reports/createReport', [ReportController::class, 'createReport']);
 
     Route::post('/guess/getData', [GuessController::class, 'getData']);
+    Route::post('/guess/totalGuessPdfMail', [GuessController::class, 'totalGuessPdfMail']);
 
     Route::post('/profile/updateProfile', [ProfileController::class, 'updateProfile']);
     Route::post('/profile/updatePassword', [ProfileController::class, 'updatePassword']);
@@ -48,6 +49,8 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/users/addUser', [UserController::class, 'addUser']);
     Route::post('/users/getUsers', [UserController::class, 'getUsers']);
+    Route::post('/users/getWaitData',[UserController::class,'getWaitData']);
+    Route::post('/users/approve',[UserController::class,'approve']);
 
     Route::post('/company/getData',[CompanyController::class,'getData']);
     Route::post('/company/save',[CompanyController::class,'save']);
