@@ -7,6 +7,7 @@ use App\Mail\ReportMail;
 use App\Models\DaysInfo;
 use App\Models\DaysStocks;
 use App\Models\EndOfDays;
+use App\Models\Holidays;
 use App\Models\Products;
 use App\Models\User;
 use App\Models\WeatherCodes;
@@ -23,23 +24,68 @@ class GuessClass
     {
         $rs = new ResultClass();
         try {
-
             if ($weather == null) {
                 $weather = request()->get('weather_code'); // Bugünün hava durumu
             }
             if ($product_id == null) {
                 $product_id = request()->get('product_id');
             }
+
             $date = Carbon::now();
+            $lastYearDate = $date->copy()->subYear(); // geçen seneki tarih
 
-            // Gün ismi (örn: Pazartesi)
+            // Önce bayram kontrolü yap
+            $holiday = Holidays::whereDate('date', $lastYearDate->toDateString())->first();
+
+            if ($holiday) {
+                // Bayram günüyse hava durumu / gün hesapları yok
+                $data = DaysInfo::whereDate('created_at', $lastYearDate->toDateString())
+                    ->where('product_id', $product_id)
+                    ->where('firm_id', Auth::user()->firm_id)
+                    ->get();
+
+                $count = $data->count();
+
+                if ($count == 0) {
+                    $rs->status = false;
+                    $rs->obj = [
+                        'holiday' => $holiday->name ?? 'Bayram',
+                        'message' => "Geçen sene bu gün bayramdı ama satış verisi bulunamadı."
+                    ];
+                    return $rs;
+                }
+
+                $totalSold = $data->sum('sales_amount');
+                $totalProduced = $data->sum('amount');
+
+                $avgSold = round($totalSold / $count);
+                $avgProduced = round($totalProduced / $count);
+                $avgDiff = $avgProduced - $avgSold;
+
+                $suggestedProduction = round($avgSold * 1.05);
+
+                $product_info = Products::where('id', $product_id)->select('name')->first();
+
+                $rs->status = true;
+                $rs->obj = [
+                    'holiday' => $holiday->name ?? 'Bayram',
+                    'average_sold' => $avgSold,
+                    'average_produced' => $avgProduced,
+                    'average_diff' => $avgDiff,
+                    'suggested_production' => $suggestedProduction,
+                    'product' => $product_info->name,
+                    'message' => "Geçen sene bugün {$holiday->name} idi. Satış ortalaması {$avgSold}. Bugün yaklaşık {$suggestedProduction} adet üretmen önerilir."
+                ];
+                return $rs;
+            }
+
+            // Normal gün ise (senin mevcut kodun çalışsın)
             $dayName = $date->translatedFormat('l');
-
-            // Bugünün gün numarası (Pazartesi = 1 ... Pazar = 7)
             $dayNumber = $date->dayOfWeekIso;
 
-            // Bugün ile aynı gün ve hava koşullarındaki geçmiş veriler
-            $data = DaysInfo::whereRaw('DAYOFWEEK(created_at) = ?', [$date->dayOfWeek + 1])->where('product_id', $product_id)->where('firm_id', Auth::user()->firm_id)
+            $data = DaysInfo::whereRaw('DAYOFWEEK(created_at) = ?', [$date->dayOfWeek + 1])
+                ->where('product_id', $product_id)
+                ->where('firm_id', Auth::user()->firm_id)
                 ->where('weather_code', $weather)
                 ->get();
 
@@ -55,21 +101,18 @@ class GuessClass
                 return $rs;
             }
 
-            $totalSold = $data->sum('sales_amount');   // satılan
-            $totalProduced = $data->sum('amount'); // üretilen
+            $totalSold = $data->sum('sales_amount');
+            $totalProduced = $data->sum('amount');
 
-            // Ortalama satılan ve üretilen miktar
             $avgSold = round($totalSold / $count);
             $avgProduced = round($totalProduced / $count);
-
-            // Ortalama fark (israf veya eksik üretim)
             $avgDiff = $avgProduced - $avgSold;
 
-            // Önerilen üretim: satış ortalaması + güvenlik payı (%5)
             $suggestedProduction = round($avgSold * 1.05);
 
             $weather_item = WeatherCodes::where('id', $weather)->select('description')->first();
             $product_info = Products::where('id', $product_id)->select('name')->first();
+
             $rs->status = true;
             $rs->obj = [
                 'weather' => $weather_item->description,
@@ -77,10 +120,10 @@ class GuessClass
                 'average_sold' => $avgSold,
                 'average_produced' => $avgProduced,
                 'average_diff' => $avgDiff,
-                'suggested_production' => $suggestedProduction, // tahmini üretim sayısı
-                'product' => $product_info->name, // tahmini üretim sayısı
+                'suggested_production' => $suggestedProduction,
+                'product' => $product_info->name,
                 'message' => "Bugün {$dayName}. Hava: {$weather_item->description}. Geçmişte ortalama {$avgProduced} üretip {$avgSold} satmışsın. 
-                              Bugün yaklaşık {$suggestedProduction} adet üretmen önerilir."
+                          Bugün yaklaşık {$suggestedProduction} adet üretmen önerilir."
             ];
         } catch (\Throwable $th) {
             $rs->status = false;

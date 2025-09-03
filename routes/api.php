@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Classes\HolidayClass;
 use App\Http\Classes\LastStockClass;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CompanyController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\DefinitionsController;
 use App\Http\Controllers\EndOfDayController;
 use App\Http\Controllers\FreezerController;
 use App\Http\Controllers\GuessController;
+use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\LastStockController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReinstallController;
@@ -49,21 +51,24 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/users/addUser', [UserController::class, 'addUser']);
     Route::post('/users/getUsers', [UserController::class, 'getUsers']);
-    Route::post('/users/getWaitData',[UserController::class,'getWaitData']);
-    Route::post('/users/approve',[UserController::class,'approve']);
+    Route::post('/users/getWaitData', [UserController::class, 'getWaitData']);
+    Route::post('/users/approve', [UserController::class, 'approve']);
 
-    Route::post('/company/getData',[CompanyController::class,'getData']);
-    Route::post('/company/save',[CompanyController::class,'save']);
+    Route::post('/company/getData', [CompanyController::class, 'getData']);
+    Route::post('/company/save', [CompanyController::class, 'save']);
 
-    Route::post('/reinstall/start',[ReinstallController::class,'start']);
-    Route::post('/user/userChange',[AuthController::class,'userChange']);
+    Route::post('/reinstall/start', [ReinstallController::class, 'start']);
+    Route::post('/user/userChange', [AuthController::class, 'userChange']);
 
-    Route::post('/freezer/getData',[FreezerController::class,'getData']);
-    Route::post('/freezer/save',[FreezerController::class,'save']);
-    Route::post('/freezer/delete',[FreezerController::class,'delete']);
-    Route::post('/freezer/createReport',[FreezerController::class,'createReport']);
+    Route::post('/freezer/getData', [FreezerController::class, 'getData']);
+    Route::post('/freezer/save', [FreezerController::class, 'save']);
+    Route::post('/freezer/delete', [FreezerController::class, 'delete']);
+    Route::post('/freezer/createReport', [FreezerController::class, 'createReport']);
 
-    Route::post('/laststock/getData',[LastStockController::class,'getData']);
-    Route::post('/laststock/save',[LastStockController::class,'save']);
-    
+    Route::post('/laststock/getData', [LastStockController::class, 'getData']);
+    Route::post('/laststock/save', [LastStockController::class, 'save']);
+
+    Route::post('/holidays/getData', [HolidayController::class, 'getData']);
+    Route::post('/holidays/add', [HolidayController::class, 'add']);
+    Route::post('/holidays/delete', [HolidayController::class, 'delete']);
 });
