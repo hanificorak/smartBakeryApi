@@ -115,7 +115,7 @@ class FreezerClass
             $startDate = request()->get('start');
             $endDate = request()->get('end');
 
-            $query = Freezers::query();
+            $query = Freezers::query()->where('firm_id', Auth::user()->firm_id);
 
             if ($startDate && $endDate) {
                 $query->whereBetween('created_at', [$startDate, $endDate]);

@@ -25,14 +25,14 @@ class CustomOrdersClass
         try {
 
             $date = request()->get('date');
-            if (empty($date)) {
+            if ($date == null) {
                 $date = Carbon::now()->format('Y-m-d');
             } else {
                 $date = Carbon::parse($date)->format('Y-m-d');
             }
 
 
-            $rs->obj = CustomOrders::with(['product:id,name'])->where('firm_id', Auth::user()->firm_id)->whereDate('created_at', '=', $date)->orderByDesc('id')->get();
+            $rs->obj = CustomOrders::with('product')->where('firm_id', Auth::user()->firm_id)->whereDate('created_at', '=', $date)->orderByDesc('id')->get();
             $rs->status = true;
         } catch (\Throwable $th) {
             $rs->status = false;
@@ -50,11 +50,21 @@ class CustomOrdersClass
             $phone = request()->get('phone');
             $product_id = request()->get('product_id');
             $amount = request()->get('amount');
-            $mdl = new CustomOrders();
-            $mdl->create_user_id = Auth::user()->id;
-            $mdl->created_at = Carbon::now();
-            $mdl->updated_at = null;
-            $mdl->firm_id = Auth::user()->firm_id;
+            $id = request()->get('id');
+
+            if ($id == null) {
+                $mdl = new CustomOrders();
+                $mdl->create_user_id = Auth::user()->id;
+                $mdl->created_at = Carbon::now();
+                $mdl->updated_at = null;
+                $mdl->firm_id = Auth::user()->firm_id;
+            } else {
+                $mdl = CustomOrders::find($id);
+                $mdl->update_user_id = Auth::user()->id;
+                $mdl->updated_at = Carbon::now();
+            }
+
+
             $mdl->name_surname = $name_surname;
             $mdl->phone = $phone;
             $mdl->product_id = $product_id;
@@ -65,7 +75,28 @@ class CustomOrdersClass
             } else {
                 $rs->status = false;
             }
+        } catch (\Throwable $th) {
+            $rs->status = false;
+            $rs->message = $th->getMessage();
+        }
+        return $rs;
+    }
+
+
+    public function delete()
+    {
+        $rs = new ResultClass();
+        try {
+
+            $id = request()->get('id');
+            $mdl = CustomOrders::find($id);
             
+            if ($mdl->delete()) {
+                $rs->status = true;
+            } else {
+                $rs->status = false;
+            }
+         
         } catch (\Throwable $th) {
             $rs->status = false;
             $rs->message = $th->getMessage();
