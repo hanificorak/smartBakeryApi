@@ -138,7 +138,7 @@ class ReportClass
                 DB::raw('SUM(days_info.ert_count) as total_ert_amount')
             )
                 ->join('days_info', 'days_info.product_id', '=', 'products.id')
-                ->where('products.firm_id',Auth::user()->firm_id)
+                ->where('products.firm_id', Auth::user()->firm_id)
                 ->groupBy('products.id', 'products.name');
 
 
@@ -203,10 +203,12 @@ class ReportClass
             $pdf->save($fullPath);
 
             $url = url('reports/' . $randomFileName);
-       if ($type_dt == "mail") {
+            if ($type_dt == "mail") {
                 Mail::to($mail)->send(new ReportMail($url, $startDate, $endDate));
-            }else{
+                $rs->obj = $url;
+            } else {
                 $rs->sub_info = "https://docs.google.com/gview?embedded=true&url=$url";
+                $rs->obj = $url;
             }
 
             $rs->status = true;
@@ -328,7 +330,7 @@ class ReportClass
 
             if ($type_dt == "mail") {
                 Mail::to($mail)->send(new ReportMail($url, $startDate, $endDate));
-            }else{
+            } else {
                 $rs->sub_info = "https://docs.google.com/gview?embedded=true&url=$url";
             }
 

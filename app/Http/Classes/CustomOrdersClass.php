@@ -21,7 +21,7 @@ class CustomOrdersClass
 
     public function getCustomOrders()
     {
-        $rs = new ResultClass();
+               $rs = new ResultClass();
         try {
 
             $date = request()->get('date');
@@ -30,7 +30,6 @@ class CustomOrdersClass
             } else {
                 $date = Carbon::parse($date)->format('Y-m-d');
             }
-
 
             $rs->obj = CustomOrders::with('product')->where('firm_id', Auth::user()->firm_id)->whereDate('created_at', '=', $date)->orderByDesc('id')->get();
             $rs->status = true;
@@ -90,7 +89,7 @@ class CustomOrdersClass
 
             $id = request()->get('id');
             $mdl = CustomOrders::find($id);
-            
+
             if ($mdl->delete()) {
                 $rs->status = true;
             } else {

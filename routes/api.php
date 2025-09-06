@@ -4,6 +4,7 @@ use App\Http\Classes\HolidayClass;
 use App\Http\Classes\LastStockClass;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CustomOrderReportController;
 use App\Http\Controllers\CustomOrdersController;
 use App\Http\Controllers\DefinitionsController;
 use App\Http\Controllers\EndOfDayController;
@@ -76,4 +77,9 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/customorders/getCustomOrders', [CustomOrdersController::class, 'getCustomOrders']);
     Route::post('/customorders/add', [CustomOrdersController::class, 'add']);
     Route::post('/customorders/delete', [CustomOrdersController::class, 'delete']);
+
+    Route::post('/customordersReport/getReportData', [CustomOrderReportController::class, 'getReportData']);
+    Route::post('/customordersReport/createReportMail', [CustomOrderReportController::class, 'createReportMail']);
+
+
 });
