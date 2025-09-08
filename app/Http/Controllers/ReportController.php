@@ -32,4 +32,14 @@ class ReportController
         } catch (\Throwable $th) {
         }
     }
+
+    public function reportViewChange()
+    {
+        try {
+            return response()->json($this->class->reportViewChange());
+        } catch (\Throwable $th) {
+        }
+    }
+
+    
 }

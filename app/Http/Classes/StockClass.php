@@ -23,7 +23,15 @@ class StockClass
         $rs = new ResultClass();
         try {
 
+            $active_lang = request()->get('lang');
+            if ($active_lang == null) {
+                $active_lang = 'de';
+            }
+
             $weathers = WeatherCodes::get();
+            foreach ($weathers as $key => $value) {
+                $weathers[$key]->description = $value->{$active_lang} ?? $value->description;
+            }
             $products = Products::where('firm_id', Auth::user()->firm_id)->get();
 
             $data = [
@@ -47,9 +55,20 @@ class StockClass
         $rs = new ResultClass();
         try {
 
+            $active_lang = request()->get('lang');
+            if ($active_lang == null) {
+                $active_lang = 'de';
+            }
+
+
             $code = request()->get('code');
 
-            $rs->obj = WeatherCodes::where('code_start', $code)->select('id', 'description')->first();
+            $items = WeatherCodes::where('code_start', $code)->select('*')->first();
+            if ($items) {
+                $items->description = $items->{$active_lang} ?? $items->description;
+            }
+
+            $rs->obj = $items;
             $rs->status = true;
         } catch (\Throwable $th) {
             $rs->status = false;
@@ -68,11 +87,11 @@ class StockClass
             if ($product_id == null) {
                 $product_id = request()->get('product_id');
             }
-            
+
             if ($amount == null) {
                 $amount = request()->get('amount');
             }
-            
+
             if ($desc == null) {
                 $desc = request()->get('desc');
             }

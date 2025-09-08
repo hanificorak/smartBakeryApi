@@ -24,6 +24,8 @@ class GuessClass
     {
         $rs = new ResultClass();
         try {
+
+
             if ($weather == null) {
                 $weather = request()->get('weather_code'); // Bugünün hava durumu
             }
@@ -140,6 +142,7 @@ class GuessClass
 
             $weather = request()->get('weather');
             $email = request()->get('email');
+            $print = request()->get('print');
 
 
             $products = Products::where('firm_id', Auth::user()->firm_id)->get();
@@ -164,6 +167,12 @@ class GuessClass
             $pdf->save($fullPath);
 
             $url = url('reports/' . $randomFileName);
+
+            if($print == 1){
+                $rs->obj = $url;
+                $rs->status = true;
+                return $rs;
+            }
             Mail::to([$email])->send(new ReportMail($url));
 
 

@@ -30,6 +30,10 @@ class ReportClass
             $dateRange = request()->get('date');
             $startDateFilter = request()->get('startDate');
             $endDateFilter = request()->get('endDate');
+            $active_lang = request()->get('lang');
+            if ($active_lang == null) {
+                $active_lang = 'de';
+            }
 
             $query = DaysInfo::with(['product', 'weather'])->where('firm_id', Auth::user()->firm_id);
 
@@ -40,6 +44,7 @@ class ReportClass
             if ($weather != null) {
                 $query->where('weather_code', $weather);
             }
+
             $startDate = null;
             $endDate = null;
             switch ($dateRange) {
@@ -59,7 +64,7 @@ class ReportClass
                     break;
 
                 case 'custom': // Bu ay
-                    $startDate = Carbon::parse($startDateFilter)->addDay(-1);
+                    $startDate = Carbon::parse($startDateFilter);
                     $endDate = Carbon::parse($endDateFilter);
                     break;
                 default:
@@ -69,8 +74,16 @@ class ReportClass
             }
 
 
-            if ($startDate && $endDate) {
-                $query->whereBetween('created_at', [$startDate, $endDate]);
+            // if ($startDate && $endDate) {
+            //     $query->whereBetween('created_at', [$startDate, $endDate]);
+            // }
+
+            if ($startDate != null) {
+                $query->whereDate('created_at', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+            }
+
+            if ($endDate != null) {
+                $query->whereDate('created_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
             }
 
             $dt = $query->get();
@@ -84,6 +97,10 @@ class ReportClass
                     if ($ds_data != null && $ds_data->parent_id != null) {
                         $dt[$key]->parentdate = $ds_data->getRootCreatedAt();
                     }
+                }
+
+                if ($value->weather) {
+                    $dt[$key]->weather->description = $value->weather->{$active_lang} ?? $value->weather->description;
                 }
             }
             $rs->obj = $dt;
@@ -109,6 +126,31 @@ class ReportClass
                 $rs =  $this->totalreport();
             } else {
                 $rs = $this->dayreport();
+            }
+        } catch (\Throwable $th) {
+            $rs->status = false;
+            $rs->message = $th->getMessage();
+        }
+        return $rs;
+    }
+
+    public function reportViewChange()
+    {
+        $rs = new ResultClass();
+        try {
+
+            $id = request()->get('id');
+
+            $item = DaysInfo::where('id', $id)->first();
+
+            $mdl = DaysInfo::find($id);
+            $mdl->report_view = ($item->report_view == 1 ? 0 : 1);
+            $mdl->updated_at = Carbon::now();
+
+            if ($mdl->save()) {
+                $rs->status = true;
+            } else {
+                $rs->status = false;
             }
         } catch (\Throwable $th) {
             $rs->status = false;
@@ -238,6 +280,7 @@ class ReportClass
 
 
             $queryBase = DaysInfo::with(['product', 'weather'])
+                ->where('report_view', 1)
                 ->where('firm_id', Auth::user()->firm_id);
 
             if (count($hiddenProd) > 0) {
@@ -292,6 +335,9 @@ class ReportClass
                     ->whereDate('created_at', $date->toDateString())
                     ->get();
 
+                if (count($dayData) == 0) {
+                    continue;
+                }
 
                 $dailyReports[] = [
                     'date' => $date->format('d.m.Y'),
@@ -330,7 +376,10 @@ class ReportClass
 
             if ($type_dt == "mail") {
                 Mail::to($mail)->send(new ReportMail($url, $startDate, $endDate));
+                $rs->obj = $url;
             } else {
+                $rs->obj = $url;
+
                 $rs->sub_info = "https://docs.google.com/gview?embedded=true&url=$url";
             }
 

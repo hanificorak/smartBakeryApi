@@ -63,6 +63,8 @@ class CustomOrderReportClass
             $end_date = request()->get('end_date');
             $prodcut_id = request()->get('product_id');
             $mail = request()->get('mail');
+            $print = request()->get('print');
+
 
             $query = CustomOrders::with('product')->where('firm_id', Auth::user()->firm_id);
 
@@ -102,6 +104,11 @@ class CustomOrderReportClass
 
             $url = url('reports/' . $randomFileName);
 
+            if($print == 1){
+                $rs->obj = $url;
+                $rs->status = true;
+                return $rs;
+            }
             Mail::to($mail)->send(new ReportMail($url));
 
             $rs->status = true;

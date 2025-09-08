@@ -112,15 +112,27 @@ class FreezerClass
         try {
 
             $mail = request()->get('email');
-            $startDate = request()->get('start');
-            $endDate = request()->get('end');
+            $startDate = request()->get('startDate');
+            $endDate = request()->get('endDate');
+            $print = request()->get('print');
+            $print = request()->get('print');
+            $prew = request()->get('prew');
 
             $query = Freezers::query()->where('firm_id', Auth::user()->firm_id);
 
-            if ($startDate && $endDate) {
-                $query->whereBetween('created_at', [$startDate, $endDate]);
+            // if ($startDate && $endDate) {
+            //     $query->whereBetween('created_at', [Carbon::parse($startDate)->format('Y-m-d'), Carbon::parse($endDate)->format('Y-m-d')]);
+            // }
+
+            if ($startDate != null) {
+                $startDate = Carbon::parse($startDate)->format('Y-m-d');
+                $query = $query->whereDate('created_at', '>=', $startDate);
             }
 
+            if ($endDate != null) {
+                $endDate = Carbon::parse($endDate)->format('Y-m-d');
+                $query = $query->whereDate('created_at', '<=', $endDate);
+            }
             $query = $query->get();
 
 
@@ -132,13 +144,23 @@ class FreezerClass
             $fullPath = $reportPath . '/' . $randomFileName;
             $company = Settings::where('firm_id', Auth::user()->firm_id)->first();
 
-            $pdf = Pdf::loadView('reports.freezer-report', compact('company','query'));
+            $pdf = Pdf::loadView('reports.freezer-report', compact('company', 'query'));
             $pdf->setPaper('A4', 'portrait');
             $pdf->save($fullPath);
 
             $url = url('reports/' . $randomFileName);
-            Mail::to([$mail])->send(new ReportMail($url, $startDate, $endDate));
 
+            $rs->obj = $url;
+
+            if ($print == 1) {
+                $rs->status = true;
+                return $rs;
+            }
+            if ($prew == 1) {
+                $rs->status = true;
+                return $rs;
+            }
+            Mail::to([$mail])->send(new ReportMail($url));
             $rs->status = true;
             $rs->message = "OK";
         } catch (\Throwable $th) {

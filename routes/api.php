@@ -43,6 +43,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/reports/getReportData', [ReportController::class, 'getReportData']);
     Route::post('/reports/createReport', [ReportController::class, 'createReport']);
+    Route::post('/reports/reportViewChange', [ReportController::class, 'reportViewChange']);
 
     Route::post('/guess/getData', [GuessController::class, 'getData']);
     Route::post('/guess/totalGuessPdfMail', [GuessController::class, 'totalGuessPdfMail']);

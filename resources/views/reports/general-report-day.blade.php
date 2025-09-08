@@ -176,7 +176,7 @@
 
         thead th {
             color: white;
-            padding: 8px 4px;
+            padding: 6px 3px;
             font-size: 12px;
             text-align: center;
             font-weight: 700;
@@ -190,7 +190,7 @@
         }
 
         tbody td {
-            padding: 7px 5px;
+            padding: 5px35px;
             font-size: 12px;
             text-align: center;
             border-bottom: 1px solid #e2e8f0;
@@ -249,14 +249,14 @@
         .totals-summary {
             display: table;
             width: 100%;
-            margin-top: 10px;
+            margin-top: 6px;
             font-size: 12px;
         }
 
         .totals-summary div {
             display: table-cell;
             text-align: center;
-            padding: 10px;
+            padding: 5px;
             border: 1px solid #e2e8f0;
             font-weight: 600;
         }
@@ -295,19 +295,32 @@
             <!-- Header Section -->
             <div class="header">
                 <div class="header-content">
-                    <div class="company-info">  
+                    <div class="company-info">
                         <h1>{{ $company->company_title }}</h1>
                         <p>{{ $company->company_address }} - {{ $company->company_phone }}</p>
                         <p>Rapor Tarihi: {{ $day['date'] }}</p>
+                        @if ($weather_view == 'view')
+                            <p>Hava Durumu:
+                                {{ $day['data'] != null && count($day['data']) ? $day['data'][0]->weather->description : '' }}
+                            </p>
+                        @endif
                     </div>
                 </div>
             </div>
-                      <div class="totals-summary">
-                        <div>Atık Oranı: {{ number_format(($day['data']->sum('remove_amount') / max($day['data']->sum('amount'), 1)) * 100, 1) }}%</div>
-                        <div>Satış Oranı: {{ number_format(($day['data']->sum('sales_amount') / max($day['data']->sum('amount'), 1)) * 100, 1) }}%</div>
-                        <div>Devir Oranı:  {{ number_format(($day['data']->sum('ert_count') / max($day['data']->sum('amount'), 1)) * 100, 1) }}%</div>
-                        <div>Atık/Satış: {{ number_format(($day['data']->sum('remove_amount') / max($day['data']->sum('sales_amount'), 1)) * 100, 1) }}%</div>
-                    </div>
+            <div class="totals-summary">
+                <div>Atık Oranı:
+                    {{ number_format(($day['data']->sum('remove_amount') / max($day['data']->sum('amount'), 1)) * 100, 1) }}%
+                </div>
+                <div>Satış Oranı:
+                    {{ number_format(($day['data']->sum('sales_amount') / max($day['data']->sum('amount'), 1)) * 100, 1) }}%
+                </div>
+                <div>Devir Oranı:
+                    {{ number_format(($day['data']->sum('ert_count') / max($day['data']->sum('amount'), 1)) * 100, 1) }}%
+                </div>
+                <div>Atık/Satış:
+                    {{ number_format(($day['data']->sum('remove_amount') / max($day['data']->sum('sales_amount'), 1)) * 100, 1) }}%
+                </div>
+            </div>
             <!-- Summary Section -->
             {{-- <div class="summary-section">
                 <div class="summary-grid">
@@ -359,11 +372,7 @@
                                 <th style="width: 12%;">Satılan</th>
                                 <th style="width: 12%;">Atık</th>
                                 <th style="width: 12%;">Ertesi G.</th>
-                                @if ($weather_view == 'view')
-                                    <th style="width: 15%;">Hava Durumu</th>
-                                @endif
-                                <th style="width: 17%;">Kayıt Tarihi</th>
-                            </tr>
+                               
                         </thead>
                         <tbody>
                             @forelse ($day['data'] as $data)
@@ -373,11 +382,6 @@
                                     <td class="quantity-sold">{{ number_format($data->sales_amount) }}</td>
                                     <td class="quantity-waste">{{ number_format($data->remove_amount) }}</td>
                                     <td class="quantity-carry">{{ number_format($data->ert_count) }}</td>
-                                    @if ($weather_view == 'view')
-                                        <td><span class="weather">{{ $data->weather->description }}</span></td>
-                                    @endif
-                                    <td class="date">
-                                        {{ \Carbon\Carbon::parse($data->created_at)->format('d.m.Y H:i') }}</td>
                                 </tr>
                             @empty
                                 <tr>

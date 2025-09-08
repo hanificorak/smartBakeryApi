@@ -22,10 +22,14 @@ class EndOfDayClass
         $rs = new ResultClass();
         try {
 
+
             $data = DaysStocks::with(['product:id,name'])->where('firm_id', Auth::user()->firm_id)->whereDate('created_at', '=', Carbon::now()->addDay(0))->get();
             foreach ($data as $key => $value) {
-               $data[$key]->parentdate = $value->getRootCreatedAt();
+                $data[$key]->parentdate = $value->getRootCreatedAt();
+              
             }
+
+
             $rs->obj = $data;
             $rs->status = true;
         } catch (\Throwable $th) {
@@ -134,8 +138,13 @@ class EndOfDayClass
         $rs = new ResultClass();
         try {
 
+            $active_lang = 'de';
+
             $data = DaysInfo::with('product')->with('weather')->where('firm_id', Auth::user()->firm_id)->whereDate('created_at', '=', Carbon::now()->addDay(0))->get();
 
+            foreach ($data as $key => $value) {
+                $data[$key]->weather->description = $value->weather->{$active_lang} ?? $value->description;
+            }
             // $data = EndOfDays::with('product')->where('firm_id', Auth::user()->firm_id)->with('weather')->whereDate('created_at', '=', Carbon::now())->get();
 
             $rs->status = true;
