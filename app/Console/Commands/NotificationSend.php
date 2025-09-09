@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Models\EndOfDays;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
@@ -32,8 +34,11 @@ class NotificationSend extends Command
         $expoPushTokens = [];
 
         foreach ($tokens as $key => $value) {
-            $this->info($value->notification_token);
-            array_push($expoPushTokens, ['ExponentPushToken[' . $value->notification_token . ']']);
+
+            $check = EndOfDays::where('firm_id', $value->firm_id)->whereDate('created_at', Carbon::now())->exists();
+            if (!$check) {
+                array_push($expoPushTokens, ['ExponentPushToken[' . $value->notification_token . ']']);
+            }
         }
 
         $messages = [];
