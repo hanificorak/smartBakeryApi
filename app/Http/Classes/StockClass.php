@@ -96,6 +96,13 @@ class StockClass
                 $desc = request()->get('desc');
             }
 
+            $check = DaysStocks::where('product_id',$product_id)->where('firm_id',Auth::user()->firm_id)->whereDate('created_at',Carbon::now())->exists();
+            if($check){
+                $rs->status = false;
+                $rs->sub_info ="rec_mev";
+                return $rs;
+            }
+
 
             $mdl = new DaysStocks();
             $mdl->created_at = Carbon::now();

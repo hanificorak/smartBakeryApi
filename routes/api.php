@@ -9,6 +9,7 @@ use App\Http\Controllers\CustomOrdersController;
 use App\Http\Controllers\DefinitionsController;
 use App\Http\Controllers\EndOfDayController;
 use App\Http\Controllers\FreezerController;
+use App\Http\Controllers\FreezerDefController;
 use App\Http\Controllers\GuessController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\LastStockController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReinstallController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\SystemController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,8 +25,9 @@ use Illuminate\Support\Facades\Route;
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/register', [AuthController::class, 'register']);
 
-
 Route::middleware('auth:api')->group(function () {
+    Route::post('/addToken', [SystemController::class, 'addToken']);
+
     Route::post('/products/getData', [DefinitionsController::class, 'getProducts']);
     Route::post('/products/addProduct', [DefinitionsController::class, 'addProduct']);
     Route::post('/products/productDelete', [DefinitionsController::class, 'productDelete']);
@@ -81,6 +84,10 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/customordersReport/getReportData', [CustomOrderReportController::class, 'getReportData']);
     Route::post('/customordersReport/createReportMail', [CustomOrderReportController::class, 'createReportMail']);
+
+    Route::post('/freezerdef/getData', [FreezerDefController::class, 'getData']);
+    Route::post('/freezerdef/save', [FreezerDefController::class, 'save']);
+    Route::post('/freezerdef/delete', [FreezerDefController::class, 'delete']);
 
 
 });

@@ -47,10 +47,14 @@ class UserClass
             if ($id == null) {
                 $mdl = new User();
                 $mdl->create_user_id = Auth::user()->id;
-                $mdl->password =  Hash::make("123456");
+                $mdl->password =  Hash::make($password);
             } else {
                 $mdl = User::find($id);
                 $mdl->updated_at = Carbon::now();
+
+                if($password != null && $password != ""){
+                    $mdl->password =  Hash::make($password);
+                }
             }
 
             $mdl->email = $email;

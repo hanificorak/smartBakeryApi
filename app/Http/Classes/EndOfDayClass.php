@@ -29,7 +29,6 @@ class EndOfDayClass
               
             }
 
-
             $rs->obj = $data;
             $rs->status = true;
         } catch (\Throwable $th) {
@@ -52,7 +51,7 @@ class EndOfDayClass
 
 
                 $id = $value['id']; // day_stock_id
-                $current = $value['current']; // bugün satılan miktar
+                $current = $value['current']; // bugün satılan miktar -- bugün elinde kalan ürün sayısı
                 $product_id = $value['product_id']; // ürün bilgisi
                 $amount = $value['amount']; // Bugün üretilen adet bilgisi
 
@@ -78,13 +77,13 @@ class EndOfDayClass
                     $mdl_day->updated_at = null;
                     $mdl_day->firm_id = Auth::user()->firm_id;
                     $mdl_day->product_id = $product_id;
-                    $mdl_day->amount = $amount - $current;
+                    $mdl_day->amount = $current;
                     $mdl_day->desc = "Ertesi günden aktarılan kayıt.";
                     $mdl_day->parent_id = $id;
                     $mdl_day->save();
                 }
 
-                $rem_count = $amount - $current;
+                $rem_count = $current;
 
                 if ($mdl_day != null) {
                     $rem_count = $rem_count - $mdl_day->amount;
@@ -95,7 +94,7 @@ class EndOfDayClass
                 $days->create_user_id = Auth::user()->id;
                 $days->product_id = $product_id;
                 $days->amount = $amount;
-                $days->sales_amount = $current;
+                $days->sales_amount = $amount - $current;
                 $days->remove_amount = $rem_count;
                 $days->ert_count = ($mdl_day == null ? 0 : $mdl_day->amount);
                 $days->weather_code = $weather_temp_code;

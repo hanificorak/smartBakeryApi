@@ -6,6 +6,7 @@ use App\Http\Classes\Tools\ResultClass;
 use App\Mail\ReportMail;
 use App\Models\DaysStocks;
 use App\Models\EndOfDays;
+use App\Models\FreezerDefs;
 use App\Models\Freezers;
 use App\Models\Products;
 use App\Models\Settings;
@@ -28,12 +29,18 @@ class FreezerClass
 
             $date = request()->get('date');
 
-            $query = Freezers::where('firm_id', Auth::user()->firm_id);
+            $query = Freezers::where('freezers.firm_id', Auth::user()->firm_id)->join('freezer_defs', 'freezers.fr_id', '=', 'freezer_defs.id')->select('freezers.*', 'freezer_defs.name as fr_name', 'freezer_defs.id as fr_id')->orderBy('freezers.created_at', 'desc');
             if ($date != null) {
-                $query->whereDate('created_at', Carbon::parse($date));
+                $query->whereDate('freezers.created_at', Carbon::parse($date));
             }
 
-            $rs->obj = $query->get();
+
+            $data = [
+                "data" => $query->get(),
+                "freezers" => FreezerDefs::where('firm_id', Auth::user()->firm_id)->get()
+            ];
+
+            $rs->obj = $data;
             $rs->status = true;
         } catch (\Throwable $th) {
             $rs->status = false;
@@ -48,7 +55,7 @@ class FreezerClass
         $rs = new ResultClass();
         try {
 
-            $name = request()->get('name');
+            $fr_id = request()->get('fr_id');
             $temp = request()->get('temp');
             $desc = request()->get('desc');
             $id = request()->get('id');
@@ -69,7 +76,7 @@ class FreezerClass
             }
 
 
-            $mdl->name = $name;
+            $mdl->fr_id = $fr_id;
             $mdl->temp = $temp;
             $mdl->desc = $desc;
 
@@ -117,8 +124,9 @@ class FreezerClass
             $print = request()->get('print');
             $print = request()->get('print');
             $prew = request()->get('prew');
+            $mail_send = request()->get('mail');
 
-            $query = Freezers::query()->where('firm_id', Auth::user()->firm_id);
+            $query = Freezers::query()->where('freezers.firm_id', Auth::user()->firm_id)->join('freezer_defs', 'freezers.fr_id', '=', 'freezer_defs.id')->select('freezers.*', 'freezer_defs.name as fr_name', 'freezer_defs.id as fr_id')->orderBy('freezers.created_at', 'desc');
 
             // if ($startDate && $endDate) {
             //     $query->whereBetween('created_at', [Carbon::parse($startDate)->format('Y-m-d'), Carbon::parse($endDate)->format('Y-m-d')]);
@@ -126,12 +134,12 @@ class FreezerClass
 
             if ($startDate != null) {
                 $startDate = Carbon::parse($startDate)->format('Y-m-d');
-                $query = $query->whereDate('created_at', '>=', $startDate);
+                $query = $query->whereDate('freezers.created_at', '>=', $startDate);
             }
 
             if ($endDate != null) {
                 $endDate = Carbon::parse($endDate)->format('Y-m-d');
-                $query = $query->whereDate('created_at', '<=', $endDate);
+                $query = $query->whereDate('freezers.created_at', '<=', $endDate);
             }
             $query = $query->get();
 
@@ -152,17 +160,22 @@ class FreezerClass
 
             $rs->obj = $url;
 
+            if ($mail_send == 1) {
+                Mail::to([$mail])->send(new ReportMail($url));
+                $rs->status = true;
+                $rs->message = "OK";
+                return $rs;
+            }
+
             if ($print == 1) {
                 $rs->status = true;
                 return $rs;
             }
+
             if ($prew == 1) {
                 $rs->status = true;
                 return $rs;
             }
-            Mail::to([$mail])->send(new ReportMail($url));
-            $rs->status = true;
-            $rs->message = "OK";
         } catch (\Throwable $th) {
             $rs->status = false;
             $rs->message = $th->getMessage();

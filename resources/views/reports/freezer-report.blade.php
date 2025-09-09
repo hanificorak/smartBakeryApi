@@ -150,16 +150,14 @@
                         <th style="width: 25%;">Dolap Adı</th>
                         <th style="width: 20%;">Çalışma Derecesi</th>
                         <th style="width: 40%;">Açıklama</th>
-                        <th style="width: 15%;">Tarih</th>
                     </tr>
                 </thead>
                 <tbody>
                   @foreach ($query as $item)
                         <tr>
-                        <td>{{ $item->name }}</td>
+                        <td>{{ $item->fr_name }}</td>
                         <td>{{ $item->temp }}</td>
                         <td>{{ $item->desc }}</td>
-                        <td>  {{ \Carbon\Carbon::parse($item->created_at)->format('d.m.Y') }}</td>
                     </tr>
                   @endforeach
                 </tbody>

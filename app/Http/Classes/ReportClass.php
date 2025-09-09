@@ -48,22 +48,26 @@ class ReportClass
             $startDate = null;
             $endDate = null;
             switch ($dateRange) {
-                case 'today': // Bugün
-                    $startDate = Carbon::today(); // Bugünün başlangıcı
-                    $endDate = Carbon::today()->endOfDay(); // Bugünün sonu
+                case 'heute': // Bugün
+                    $startDate = Carbon::today()->startOfDay(); // Bugün 00:00
+                    $endDate   = Carbon::today()->endOfDay();   // Bugün 23:59:59
+                    break;
+                case 'today': // Dün
+                    $startDate = Carbon::yesterday()->startOfDay(); // Dün 00:00
+                    $endDate   = Carbon::yesterday()->endOfDay();   // Dün 23:59:59
                     break;
 
-                case 'week': // Bu hafta
-                    $startDate = Carbon::now()->startOfWeek(); // Haftanın başlangıcı (Pazartesi)
-                    $endDate = Carbon::now()->endOfWeek(); // Haftanın sonu (Pazar)
+                case 'week': // Geçen hafta
+                    $startDate = Carbon::now()->subWeek()->startOfWeek(); // Geçen haftanın pazartesi 00:00
+                    $endDate   = Carbon::now()->subWeek()->endOfWeek();   // Geçen haftanın pazar 23:59:59
                     break;
 
-                case 'month': // Bu ay
-                    $startDate = Carbon::now()->startOfMonth(); // Ayın başlangıcı
-                    $endDate = Carbon::now()->endOfMonth(); // Ayın sonu
+                case 'month': // Geçen ay
+                    $startDate = Carbon::now()->subMonth()->startOfMonth(); // Geçen ayın başı
+                    $endDate   = Carbon::now()->subMonth()->endOfMonth();   // Geçen ayın sonu
                     break;
 
-                case 'custom': // Bu ay
+                case 'custom':
                     $startDate = Carbon::parse($startDateFilter);
                     $endDate = Carbon::parse($endDateFilter);
                     break;
@@ -169,6 +173,8 @@ class ReportClass
             $mail = request()->get('mail');
             $hiddenProd = request()->get('hiddenProd');
             $type_dt = request()->get('type_dt');
+            $startDateFilter = request()->get('startDate');
+            $endDateFilter = request()->get('endDate');
 
 
             $query = Products::select(
@@ -199,21 +205,29 @@ class ReportClass
             $startDate = null;
             $endDate = null;
             switch ($dateRange) {
-                case 'today':
-                    $startDate = Carbon::today();
-                    $endDate = Carbon::today()->endOfDay();
+                case 'heute': // Bugün
+                    $startDate = Carbon::today()->startOfDay(); // Bugün 00:00
+                    $endDate   = Carbon::today()->endOfDay();   // Bugün 23:59:59
+                    break;
+                case 'today': // Dün
+                    $startDate = Carbon::yesterday()->startOfDay(); // Dün 00:00
+                    $endDate   = Carbon::yesterday()->endOfDay();   // Dün 23:59:59
                     break;
 
-                case 'week':
-                    $startDate = Carbon::now()->startOfWeek();
-                    $endDate = Carbon::now()->endOfWeek();
+                case 'week': // Geçen hafta
+                    $startDate = Carbon::now()->subWeek()->startOfWeek(); // Geçen haftanın pazartesi 00:00
+                    $endDate   = Carbon::now()->subWeek()->endOfWeek();   // Geçen haftanın pazar 23:59:59
                     break;
 
-                case 'month':
-                    $startDate = Carbon::now()->startOfMonth();
-                    $endDate = Carbon::now()->endOfMonth();
+                case 'month': // Geçen ay
+                    $startDate = Carbon::now()->subMonth()->startOfMonth(); // Geçen ayın başı
+                    $endDate   = Carbon::now()->subMonth()->endOfMonth();   // Geçen ayın sonu
                     break;
 
+                case 'custom':
+                    $startDate = Carbon::parse($startDateFilter);
+                    $endDate = Carbon::parse($endDateFilter);
+                    break;
                 default:
                     $startDate = null;
                     $endDate = null;
@@ -299,22 +313,26 @@ class ReportClass
             $startDate = null;
             $endDate = null;
             switch ($dateRange) {
-                case 'today':
-                    $startDate = Carbon::today();
-                    $endDate = Carbon::today();
+                case 'heute': // Bugün
+                    $startDate = Carbon::today()->startOfDay(); // Bugün 00:00
+                    $endDate   = Carbon::today()->endOfDay();   // Bugün 23:59:59
+                    break;
+                case 'today': // Dün
+                    $startDate = Carbon::yesterday()->startOfDay(); // Dün 00:00
+                    $endDate   = Carbon::yesterday()->endOfDay();   // Dün 23:59:59
                     break;
 
-                case 'week':
-                    $startDate = Carbon::now()->startOfWeek();
-                    $endDate = Carbon::now()->endOfWeek();
+                case 'week': // Geçen hafta
+                    $startDate = Carbon::now()->subWeek()->startOfWeek(); // Geçen haftanın pazartesi 00:00
+                    $endDate   = Carbon::now()->subWeek()->endOfWeek();   // Geçen haftanın pazar 23:59:59
                     break;
 
-                case 'month':
-                case 'all':
-                    $startDate = Carbon::now()->startOfMonth();
-                    $endDate = Carbon::now()->endOfMonth();
+                case 'month': // Geçen ay
+                    $startDate = Carbon::now()->subMonth()->startOfMonth(); // Geçen ayın başı
+                    $endDate   = Carbon::now()->subMonth()->endOfMonth();   // Geçen ayın sonu
                     break;
-                case 'custom': // Bu ay
+
+                case 'custom':
                     $startDate = Carbon::parse($startDateFilter);
                     $endDate = Carbon::parse($endDateFilter);
                     break;
