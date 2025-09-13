@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>smartBakery Dolap Raporu</title>
+    <title>{{ __('freezer.smartbakery_freezer_report') }}</title>
     <style>
         @page {
             margin: 20mm;
             size: A4;
         }
-
-        
 
         * {
             font-family: "DejaVu Sans Mono", monospace;
@@ -132,24 +130,24 @@
 </head>
 <body>
     <div class="header">
-        <div class="company-name">smartBakery</div>
-        <div class="report-title">Dolap Raporu</div>
-        <div class="report-date">Rapor Tarihi: {{ date('d.m.Y H:i') }}</div>
+        <div class="company-name">SmartBakery</div>
+        <div class="report-title">{{ __('freezer.freezer_report') }}</div>
+        <div class="report-date">{{ __('freezer.report_date') }}: {{ date('d.m.Y H:i') }}</div>
     </div>
 
     <div class="content">
         <div class="summary-box">
-            <div class="summary-title">Rapor Özeti</div>
-            <div>Bu rapor, smartBakery sistemindeki dolap durumlarını ve çalışma derecelerini göstermektedir.</div>
+            <div class="summary-title">{{ __('freezer.report_summary') }}</div>
+            <div>{{ __('freezer.freezer_summary_text') }}</div>
         </div>
 
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 25%;">Dolap Adı</th>
-                        <th style="width: 20%;">Çalışma Derecesi</th>
-                        <th style="width: 40%;">Açıklama</th>
+                        <th style="width: 25%;">{{ __('freezer.freezer_name') }}</th>
+                        <th style="width: 20%;">{{ __('freezer.working_degree') }}</th>
+                        <th style="width: 40%;">{{ __('freezer.description') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -166,8 +164,8 @@
     </div>
 
     <div class="footer">
-        <div>smartBakery Yönetim Sistemi - Otomatik Rapor</div>
-        <div>Bu rapor sistem tarafından otomatik olarak oluşturulmuştur.</div>
+        <div>{{ __('freezer.smartbakery_management_system') }}</div>
+        <div>{{ __('freezer.auto_generated_report') }}</div>
     </div>
 </body>
 </html>

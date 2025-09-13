@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Özel Sipariş Listesi Raporu</title>
+    <title>{{ __('customorder.custom_order_list_report') }}</title>
     <style>
         body {
             font-family: 'DejaVu Sans', sans-serif;
@@ -39,22 +39,6 @@
             font-size: 11px;
             color: #7f8c8d;
             margin-top: 5px;
-        }
-
-        .report-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 25px;
-            padding: 10px 0;
-        }
-
-        .info-section {
-            font-size: 11px;
-        }
-
-        .info-label {
-            color: #7f8c8d;
-            font-weight: bold;
         }
 
         .table-container {
@@ -166,8 +150,8 @@
     <!-- Başlık Bölümü -->
     <div class="header">
         <div class="company-name">Smart Bakery</div>
-        <div class="report-title">ÖZEL SİPARİŞ LİSTESİ RAPORU</div>
-        <div class="report-date">Rapor Tarihi: {{ date('d.m.Y H:i') }}</div>
+        <div class="report-title">{{ __('customorder.custom_order_list_report') }}</div>
+        <div class="report-date">{{ __('customorder.report_date') }}: {{ date('d.m.Y H:i') }}</div>
     </div>
 
     <!-- Tablo Bölümü -->
@@ -175,9 +159,9 @@
         <table>
             <thead>
                 <tr>
-                    <th>Müşteri Adı</th>
-                    <th>Ürün Adı</th>
-                    <th style="text-align: center;">Miktar</th>
+                    <th>{{ __('customorder.customer_name') }}</th>
+                    <th>{{ __('customorder.product_name') }}</th>
+                    <th style="text-align: center;">{{ __('customorder.quantity') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -194,24 +178,24 @@
 
     <!-- Özet Bölümü -->
     <div class="summary-section">
-        <div class="summary-title">Rapor Özeti</div>
+        <div class="summary-title">{{ __('customorder.report_summary') }}</div>
         <div class="summary-item">
-            <span class="summary-label">Toplam Sipariş Sayısı:</span>
-            <span class="summary-value">{{ count($data) }} Adet</span>
+            <span class="summary-label">{{ __('customorder.total_orders') }}:</span>
+            <span class="summary-value">{{ count($data) }} {{ __('customorder.pcs') }}</span>
         </div>
         <div class="summary-item">
-            <span class="summary-label">Toplam Ürün Miktarı:</span>
-            <span class="summary-value">{{ ($data == null ? 0 : $data->sum('amount')) }} Adet</span>
+            <span class="summary-label">{{ __('customorder.total_quantity') }}:</span>
+            <span class="summary-value">{{ ($data == null ? 0 : $data->sum('amount')) }} {{ __('customorder.pcs') }}</span>
         </div>
         <div class="summary-item">
-            <span class="summary-label">Rapor Oluşturma Tarihi:</span>
+            <span class="summary-label">{{ __('customorder.report_creation_date') }}:</span>
             <span class="summary-value">{{ date('d.m.Y H:i:s') }}</span>
         </div>
     </div>
 
     <!-- Footer -->
     <div class="footer">
-        <div>Bu rapor otomatik olarak sistem tarafından oluşturulmuştur.</div>
+        <div>{{ __('customorder.auto_generated_report') }}</div>
     </div>
 </body>
 

@@ -2,34 +2,32 @@
 <html lang="tr">
 <head>
     <meta charset="utf-8">
-    <title>Günlük Tahmini Üretim Raporu</title>
+    <title>{{ __('guess.daily_estimated_production_report') }}</title>
     <style>
         @page {
-            margin: 40px 30px 40px 30px; /* Kenar boşlukları azaltıldı */
+            margin: 40px 30px 40px 30px;
         }
 
         body {
             font-family: "DejaVu Sans", sans-serif;
-            font-size: 11px; /* Font boyutu biraz daha küçültüldü */
+            font-size: 11px;
             color: #333;
-            line-height: 1.4; /* Satır aralığı azaltıldı */
-            background-color: #fff; /* Tamamen beyaz arka plan */
+            line-height: 1.4;
+            background-color: #fff;
         }
 
-        /* Üst bilgi */
         .header {
             position: fixed;
-            top: 0; /* Üste sıfırlandı */
+            top: 0;
             left: 0;
             right: 0;
-            height: 50px; /* Yükseklik azaltıldı */
-            padding: 0 30px; /* Kenar boşlukları ile uyumlu */
-            background-color: #f8f8f8; /* Açık gri arka plan */
-            border-bottom: 1px solid #ddd; /* Daha belirgin bir çizgi */
+            height: 50px;
+            padding: 0 30px;
+            background-color: #f8f8f8;
+            border-bottom: 1px solid #ddd;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: none; /* Gölge kaldırıldı */
         }
 
         .brand {
@@ -38,17 +36,17 @@
         }
 
         .brand img {
-            height: 35px; /* Logo boyutu küçültüldü */
+            height: 35px;
             margin-right: 10px;
-            filter: none; /* Gri tonlama kaldırıldı */
-            opacity: 1; /* Tam opaklık */
+            filter: none;
+            opacity: 1;
         }
 
         .brand .name {
             font-size: 15px;
             font-weight: 700;
-            letter-spacing: 0.2px; /* Harf aralığı azaltıldı */
-            color: #212121; /* Koyu renk */
+            letter-spacing: 0.2px;
+            color: #212121;
         }
 
         .report-info {
@@ -59,97 +57,84 @@
             font-size: 16px;
             font-weight: 700;
             color: #212121;
-            margin-bottom: 3px; /* Boşluk azaltıldı */
+            margin-bottom: 3px;
         }
 
         .report-date {
-            font-size: 10px; /* Tarih boyutu küçültüldü */
+            font-size: 10px;
             color: #666;
         }
 
-        /* Alt bilgi */
         .footer {
             position: fixed;
-            bottom: 0; /* Alta sıfırlandı */
+            bottom: 0;
             left: 0;
             right: 0;
-            height: 40px; /* Yükseklik azaltıldı */
+            height: 40px;
             background-color: #f8f8f8;
             border-top: 1px solid #ddd;
             font-size: 10px;
             color: #666;
             text-align: center;
-            padding-top: 8px; /* İç boşluk azaltıldı */
-            box-shadow: none; /* Gölge kaldırıldı */
+            padding-top: 8px;
         }
 
-        /* Ana içerik */
         main {
-            padding: 20px 30px 0 30px; /* Üst boşluk ve kenar boşlukları */
-            margin-top: 50px; /* Header yüksekliği kadar boşluk */
-            margin-bottom: 40px; /* Footer yüksekliği kadar boşluk */
+            padding: 20px 30px 0 30px;
+            margin-top: 50px;
+            margin-bottom: 40px;
         }
 
         table {
             width: 100%;
-            border-collapse: collapse; /* Tekrar collapse yapıldı */
-            margin-top: 20px; /* Boşluk azaltıldı */
-            box-shadow: none; /* Gölge kaldırıldı */
-            border-radius: 0; /* Yuvarlak köşeler kaldırıldı */
-            overflow: visible; /* Köşeler için overflow kaldırıldı */
+            border-collapse: collapse;
+            margin-top: 20px;
         }
 
         th, td {
-            padding: 10px 15px; /* İç boşluklar azaltıldı */
+            padding: 10px 15px;
             text-align: left;
-            border: 1px solid #e0e0e0; /* Tüm kenarlıklara daha ince ve açık bir çizgi */
+            border: 1px solid #e0e0e0;
         }
 
         th {
-            background: #eceff1; /* Daha nötr bir gri tonu */
-            color: #212121; /* Koyu renk */
+            background: #eceff1;
+            color: #212121;
             font-size: 12px;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.1px; /* Harf aralığı daha da azaltıldı */
         }
 
         td {
             background-color: #ffffff;
             font-size: 11px;
-            border-bottom: 1px solid #e0e0e0; /* Tüm kenarlıklar için */
-        }
-
-        tr:last-child td {
-            border-bottom: 1px solid #e0e0e0; /* Son satırın alt çizgisini bırak */
+            border-bottom: 1px solid #e0e0e0;
         }
 
         tr:nth-child(even) td {
-            background-color: #fcfcfc; /* Alternatif satır rengi daha açık */
+            background-color: #fcfcfc;
         }
 
-        /* Ekstra bölümler */
         .section-header {
             font-size: 16px;
             font-weight: bold;
             color: #212121;
-            margin-bottom: 15px; /* Boşluk azaltıldı */
-            border-bottom: 1px solid #ccc; /* Daha ince bir çizgi */
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ccc;
             padding-bottom: 5px;
-            display: block; /* Tam genişlikte */
+            display: block;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .summary-box {
-            background-color: #f0f4f8; /* Daha nötr bir mavi tonu */
-            border-radius: 4px; /* Daha az yuvarlak köşeler */
-            padding: 15px; /* İç boşluk azaltıldı */
-            margin-top: 20px; /* Boşluk azaltıldı */
+            background-color: #f0f4f8;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 20px;
             font-size: 12px;
-            color: #424242; /* Metin rengi koyu */
+            color: #424242;
             line-height: 1.4;
-            border: 1px solid #e0e0e0; /* Kenarlık eklendi */
+            border: 1px solid #e0e0e0;
         }
 
         .summary-box strong {
@@ -160,8 +145,6 @@
 <body>
     <div class="header">
         <div class="brand">
-            <!-- Logonuzun yolu burada olmalı -->
-            <!-- <img src="{{ public_path('images/your-logo.png') }}" alt="Şirket Logosu"> -->
             <span class="name">SmartBakery</span>
         </div>
         <div class="report-info">
@@ -171,12 +154,12 @@
     </div>
 
     <main>
-        <div class="section-header">Rapor Detayları</div>
+        <div class="section-header">{{ __('guess.report_details') }}</div>
         <table>
             <thead>
                 <tr>
-                    <th style="width: 35%;">Ürün Adı</th>
-                    <th style="width: 65%;">Tahmin Mesajı</th>
+                    <th style="width: 35%;">{{ __('guess.product_name') }}</th>
+                    <th style="width: 65%;">{{ __('guess.estimated_message') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -190,12 +173,15 @@
         </table>
 
         <div class="summary-box">
-            <strong>Not:</strong> Bu rapor, yapay zeka destekli tahmin modelimize dayanmaktadır ve üretim planlamanıza yardımcı olmak amacıyla sunulmuştur. Gerçek üretim verileri farklılık gösterebilir.
+            <strong>{{ __('guess.note') }}:</strong> 
+            {{ __('guess.report_note') }}
         </div>
     </main>
 
     <div class="footer">
-        SmartBakery &copy; {{ \Carbon\Carbon::now()->format('Y') }} | Tüm Hakları Saklıdır. | Sayfa <script type="text/php">echo $PAGE_NUM;</script>
+        SmartBakery &copy; {{ \Carbon\Carbon::now()->format('Y') }} | 
+        {{ __('guess.all_rights_reserved') }} | 
+        {{ __('guess.page') }} <script type="text/php">echo $PAGE_NUM;</script>
     </div>
 </body>
 </html>

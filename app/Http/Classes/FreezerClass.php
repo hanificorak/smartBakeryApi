@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Models\WeatherCodes;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -125,6 +126,13 @@ class FreezerClass
             $print = request()->get('print');
             $prew = request()->get('prew');
             $mail_send = request()->get('mail');
+            $lang = request()->get('lang');
+
+            if ($lang == null) {
+                $lang = 'de';
+            }
+            App::setLocale($lang);
+
 
             $query = Freezers::query()->where('freezers.firm_id', Auth::user()->firm_id)->join('freezer_defs', 'freezers.fr_id', '=', 'freezer_defs.id')->select('freezers.*', 'freezer_defs.name as fr_name', 'freezer_defs.id as fr_id')->orderBy('freezers.created_at', 'desc');
 

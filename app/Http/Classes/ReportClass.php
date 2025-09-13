@@ -15,6 +15,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Carbon\CarbonPeriod;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 
 class ReportClass
@@ -122,7 +123,12 @@ class ReportClass
 
         try {
 
+            $lang = request()->get('lang_code');
+            if ($lang == null) {
+                $lang = 'de';
+            }
 
+            App::setLocale($lang); // 'tr', 'en' veya 'de'
 
             $type = request()->get('type');
 
@@ -292,8 +298,13 @@ class ReportClass
             $weatherView = request()->get('weatherView');
             $type_dt = request()->get('type_dt');
 
+            $active_lang =  request()->get('lang_code');
+            if ($active_lang == null) {
+                $active_lang = 'de';
+            }
 
             $queryBase = DaysInfo::with(['product', 'weather'])
+
                 ->where('report_view', 1)
                 ->where('firm_id', Auth::user()->firm_id);
 
@@ -353,10 +364,12 @@ class ReportClass
                     ->whereDate('created_at', $date->toDateString())
                     ->get();
 
+
                 if (count($dayData) == 0) {
                     continue;
                 }
 
+                $dayData[0]->weather->description = $dayData[0]->weather->{$active_lang} ?? $dayData[0]->weather->description;
                 $dailyReports[] = [
                     'date' => $date->format('d.m.Y'),
                     'data' => $dayData

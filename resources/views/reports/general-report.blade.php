@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ürün Satış ve Atık Raporu</title>
+    <title>{{ __('totalrep.report_title') }}</title>
     <style>
         body {
             font-family: "DejaVu Sans Mono", monospace;
@@ -182,76 +182,71 @@
             page-break-after: always;
         }
 
-        /* Sayfa numarası için */
-        @page {
+        /* @page {
             margin: 20mm;
 
             @bottom-right {
-                content: "Sayfa " counter(page);
-                font-family: "DejaVu Sans Mono", monospace;
-                font-size: 10px;
-                color: #7f8c8d;
-            }
+                content: "@lang('totalrep.page')
+
+        " counter(page);
+ font-family: "DejaVu Sans Mono",
+        monospace;
+        font-size: 10px;
+        color: #7f8c8d;
         }
+        }
+
+        */
     </style>
 </head>
+
 @php
     $totalAmount = 0;
     $totalSales = 0;
     $totalRemove = 0;
     $totalErt = 0;
+
+    foreach ($reportData as $item) {
+        $totalAmount += $item->total_amount;
+        $totalSales += $item->total_sales_amount;
+        $totalRemove += $item->total_remove_amount;
+        $totalErt += $item->total_ert_count;
+    }
 @endphp
-@foreach ($reportData as $item)
-    @php
-        $totalAmount = $totalAmount + $item->total_amount;
-        $totalSales = $totalSales + $item->total_sales_amount;
-        $totalRemove = $totalRemove + $item->total_remove_amount;
-        $totalErt = $totalErt + $item->total_ert_count;
-    @endphp
-@endforeach
 
 <body>
-    <!-- Header Section -->
-    <div class="header">
-        <div class="company-logo">{{ $company->company_title ?? 'ŞIRKET ADI' }}</div>
-        <div class="company-info">
-            {{ $company->company_address ?? 'Şirket Adresi, İl/İlçe' }} |
-            Tel: {{ $company->company_phone ?? '+90 XXX XXX XX XX' }} |
-        </div>
-        <div class="report-title">ÜRÜN SATIŞ VE ATIK RAPORU</div>
-    </div>
+
 
     <!-- Report Meta Information -->
     <div class="report-meta">
         <div class="meta-row">
             <div class="meta-cell">
-                <div class="meta-label">Rapor Tarihi:</div>
+                <div class="meta-label">{{ __('totalrep.report_date') }}:</div>
                 <div class="meta-value">{{ $reportDate ?? date('d.m.Y H:i') }}</div>
             </div>
             <div class="meta-cell">
-                <div class="meta-label">Tarih Aralığı:</div>
+                <div class="meta-label">{{ __('totalrep.date_range') }}:</div>
                 <div class="meta-value">{{ $startDate ?? '01.01.2024' }} - {{ $endDate ?? '31.12.2024' }}</div>
             </div>
-
         </div>
     </div>
 
     <!-- Summary Section -->
     <div class="summary-section">
-        <div class="summary-title">ÖZET BİLGİLER</div>
+        <div class="summary-title">{{ __('totalrep.summary') }}</div>
 
         <div class="summary-cards">
             <div class="summary-card">
-                <div class="card-title">TOPLAM ÜRETİM</div>
-                <div class="card-value">{{ $totalAmount }} adet</div>
+                <div class="card-title">{{ __('totalrep.total_production') }}</div>
+                <div class="card-value">{{ $totalAmount }} {{ __('totalrep.piece') }}</div>
             </div>
             <div class="summary-card">
-                <div class="card-title">TOPLAM SATIŞ</div>
-                <div class="card-value">{{ $totalSales }} adet</div>
+                <div class="card-title">{{ __('totalrep.total_sales') }}</div>
+                <div class="card-value">{{ $totalSales }} {{ __('totalrep.piece') }}</div>
             </div>
             <div class="summary-card">
-                <div class="card-title">TOPLAM ATIK</div>
-                <div class="card-value danger">{{ $totalRemove }} adet</div>
+                <div class="card-title">{{ __('totalrep.total_waste') }}</div>
+                <div class="card-value danger">{{ $totalRemove }} {{ __('totalrep.piece') }}</div>
             </div>
         </div>
     </div>
@@ -261,34 +256,31 @@
         <thead>
             <tr>
                 <th style="width: 5%;">#</th>
-                <th style="width: 25%;">Ürün Adı</th>
-                <th style="width: 15%;" class="text-right">Üretim</th>
-                <th style="width: 15%;" class="text-right">Satış</th>
-                <th style="width: 15%;" class="text-right">Atık</th>
-                <th style="width: 15%;" class="text-right">Ertesi Güne Devir</th>
+                <th style="width: 25%;">{{ __('totalrep.product_name') }}</th>
+                <th style="width: 15%;" class="text-right">{{ __('totalrep.production') }}</th>
+                <th style="width: 15%;" class="text-right">{{ __('totalrep.sales') }}</th>
+                <th style="width: 15%;" class="text-right">{{ __('totalrep.waste') }}</th>
+                <th style="width: 15%;" class="text-right">{{ __('totalrep.carryover') }}</th>
             </tr>
         </thead>
         <tbody>
-
             @foreach ($reportData as $item)
                 <tr>
-                    <th>
+                    <td>{{ $loop->iteration }}</td>
                     <td>{{ $item->name }}</td>
-                    <td>{{ $item->total_amount }}</td>
-                    <td>{{ $item->total_sales_amount }}</td>
-                    <td>{{ $item->total_remove_amount }}</td>
-                    <td>{{ $item->total_ert_amount }}</td>
-                    </th>
+                    <td class="text-right">{{ $item->total_amount }}</td>
+                    <td class="text-right">{{ $item->total_sales_amount }}</td>
+                    <td class="text-right">{{ $item->total_remove_amount }}</td>
+                    <td class="text-right">{{ $item->total_ert_amount }}</td>
                 </tr>
             @endforeach
-
         </tbody>
     </table>
 
     <!-- Footer -->
     <div class="footer">
-        <p>Bu rapor {{ date('d.m.Y H:i') }} tarihinde sistem tarafından otomatik olarak oluşturulmuştur.</p>
-        <p>{{ $company->company_title ?? 'Şirket Adı' }} - Tüm hakları saklıdır.</p>
+        <p>{{ __('totalrep.generated_on') }} {{ date('d.m.Y H:i') }}</p>
+        <p>{{ $company->company_title ?? __('totalrep.company_name') }} - {{ __('totalrep.rights_reserved') }}</p>
     </div>
 </body>
 

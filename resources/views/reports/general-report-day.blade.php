@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Genel Rapor - smartBakery</title>
+    <title>{{ __('general_report') }} - smartBakery</title>
 
     <style>
         * {
@@ -298,9 +298,9 @@
                     <div class="company-info">
                         <h1>{{ $company->company_title }}</h1>
                         <p>{{ $company->company_address }} - {{ $company->company_phone }}</p>
-                        <p>Rapor Tarihi: {{ $day['date'] }}</p>
+                        <p>{{ __('report.report_date') }}: {{ $day['date'] }}</p>
                         @if ($weather_view == 'view')
-                            <p>Hava Durumu:
+                            <p>{{ __('report.weather') }}:
                                 {{ $day['data'] != null && count($day['data']) ? $day['data'][0]->weather->description : '' }}
                             </p>
                         @endif
@@ -308,71 +308,32 @@
                 </div>
             </div>
             <div class="totals-summary">
-                <div>Atık Oranı:
+                <div>{{ __('report.waste_ratio') }}:
                     {{ number_format(($day['data']->sum('remove_amount') / max($day['data']->sum('amount'), 1)) * 100, 1) }}%
                 </div>
-                <div>Satış Oranı:
+                <div>{{ __('report.sales_ratio') }}:
                     {{ number_format(($day['data']->sum('sales_amount') / max($day['data']->sum('amount'), 1)) * 100, 1) }}%
                 </div>
-                <div>Devir Oranı:
+                <div>{{ __('report.turnover_ratio') }}:
                     {{ number_format(($day['data']->sum('ert_count') / max($day['data']->sum('amount'), 1)) * 100, 1) }}%
                 </div>
-                <div>Atık/Satış:
+                <div>{{ __('report.waste_sales_ratio') }}:
                     {{ number_format(($day['data']->sum('remove_amount') / max($day['data']->sum('sales_amount'), 1)) * 100, 1) }}%
                 </div>
             </div>
-            <!-- Summary Section -->
-            {{-- <div class="summary-section">
-                <div class="summary-grid">
-                    <div class="summary-info">
-                        <h3 style="font-size:16px; margin-bottom:8px;">Rapor Özeti</h3>
-                    </div>
-                    <div class="stats-cards">
-                        <div class="stats-grid">
-                            <div class="stat-row">
-                                <div class="stat-card" style="padding:8px 6px; border-radius:6px;">
-                                    <div class="number" style="font-size:16px;">
-                                        {{ number_format(($day['data']->sum('remove_amount') / max($day['data']->sum('amount'), 1)) * 100, 1) }}%
-                                    </div>
-                                    <div class="label" style="font-size:10px;">Atık Oranı</div>
-                                </div>
-                                <div class="stat-card" style="padding:8px 6px; border-radius:6px;">
-                                    <div class="number" style="font-size:16px;">
-                                        {{ number_format(($day['data']->sum('sales_amount') / max($day['data']->sum('amount'), 1)) * 100, 1) }}%
-                                    </div>
-                                    <div class="label" style="font-size:10px;">Satış Oranı</div>
-                                </div>
-                                <div class="stat-card" style="padding:8px 6px; border-radius:6px;">
-                                    <div class="number" style="font-size:16px;">
-                                        {{ number_format(($day['data']->sum('ert_count') / max($day['data']->sum('amount'), 1)) * 100, 1) }}%
-                                    </div>
-                                    <div class="label" style="font-size:10px;">Devir Oranı</div>
-                                </div>
-                                <div class="stat-card" style="padding:8px 6px; border-radius:6px;">
-                                    <div class="number" style="font-size:16px;">
-                                        {{ number_format(($day['data']->sum('remove_amount') / max($day['data']->sum('sales_amount'), 1)) * 100, 1) }}%
-                                    </div>
-                                    <div class="label" style="font-size:10px;">Atık/Satış</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
-
-            <!-- Content Section -->
+        
             <div class="content">
-                <h2 class="section-title">Detaylı Ürün Analizi</h2>
+                <h2 class="section-title">@lang('report.detailed_product_analysis') </h2>
                 <div class="table-container">
                     <table>
                         <thead>
                             <tr>
-                                <th style="width: 20%;">Ürün Adı</th>
-                                <th style="width: 12%;">Üretilen</th>
-                                <th style="width: 12%;">Satılan</th>
-                                <th style="width: 12%;">Atık</th>
-                                <th style="width: 12%;">Ertesi G.</th>
-                               
+                                <th style="width: 20%;">@lang('report.product')</th>
+                                <th style="width: 12%;">@lang('report.produced') </th>
+                                <th style="width: 12%;">@lang('report.sold') </th>
+                                <th style="width: 12%;">@lang('report.waste') </th>
+                                <th style="width: 12%;">@lang('report.next_day') </th>
+
                         </thead>
                         <tbody>
                             @forelse ($day['data'] as $data)
@@ -385,7 +346,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="empty-state">Bu tarih için kayıtlı veri bulunmamaktadır
+                                    <td colspan="7" class="empty-state">@lang('report.no_data_for_date')
                                     </td>
                                 </tr>
                             @endforelse
@@ -396,18 +357,17 @@
                 <!-- Toplam Rakamlar Tablo Altında -->
                 @if ($day['data']->count() > 0)
                     <div class="totals-summary">
-                        <div>Toplam Üretim: {{ $day['data']->sum('amount') }}</div>
-                        <div>Toplam Satış: {{ $day['data']->sum('sales_amount') }}</div>
-                        <div>Toplam Atık: {{ $day['data']->sum('remove_amount') }}</div>
-                        <div>Ertesi Güne: {{ $day['data']->sum('ert_count') }}</div>
+                        <div>@lang('report.total_production'): {{ $day['data']->sum('amount') }}</div>
+                        <div>@lang('report.total_sales') : {{ $day['data']->sum('sales_amount') }}</div>
+                        <div>@lang('report.total_waste') : {{ $day['data']->sum('remove_amount') }}</div>
                     </div>
                 @endif
             </div>
 
             <!-- Footer -->
             <div class="footer">
-                <p><span class="company-name">smartBakery</span> © {{ date('Y') }} - Tüm hakları saklıdır.</p>
-                <p>Bu rapor sistem tarafından otomatik olarak {{ date('d.m.Y H:i') }} tarihinde oluşturulmuştur.</p>
+                        <p><span class="company-name">smartBakery</span> © {{ date('Y') }} - @lang('report.all_rights_reserved').</p>
+                <p>@lang('report.report_generated_automatically')  {{ date('d.m.Y H:i') }}  @lang('report.report_generated_automatically').</p>
             </div>
         </div>
     @endforeach

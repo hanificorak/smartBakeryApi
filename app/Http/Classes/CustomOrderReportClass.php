@@ -9,6 +9,7 @@ use App\Models\Settings;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Mail;
 
 class CustomOrderReportClass
@@ -23,6 +24,7 @@ class CustomOrderReportClass
             $start_date = request()->get('start_date');
             $end_date = request()->get('end_date');
             $prodcut_id = request()->get('product_id');
+           
 
             $query = CustomOrders::with('product')->where('firm_id', Auth::user()->firm_id);
 
@@ -64,10 +66,15 @@ class CustomOrderReportClass
             $prodcut_id = request()->get('product_id');
             $mail = request()->get('mail');
             $print = request()->get('print');
+            $lang = request()->get('lang');
 
+            if ($lang == null) {
+                $lang = 'de';
+            }
+
+            App::setLocale($lang);
 
             $query = CustomOrders::with('product')->where('firm_id', Auth::user()->firm_id);
-
             if ($customer_name != null) {
                 $query = $query->where('name_surname', 'like', '%' . $customer_name . '%');
             }
@@ -104,7 +111,7 @@ class CustomOrderReportClass
 
             $url = url('reports/' . $randomFileName);
 
-            if($print == 1){
+            if ($print == 1) {
                 $rs->obj = $url;
                 $rs->status = true;
                 return $rs;

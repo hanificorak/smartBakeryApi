@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\WeatherCodes;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
@@ -143,6 +144,13 @@ class GuessClass
             $weather = request()->get('weather');
             $email = request()->get('email');
             $print = request()->get('print');
+            $lang = request()->get('lang');
+
+            if ($lang == null) {
+                $lang = 'de';
+            }
+
+            App::setLocale($lang);
 
 
             $products = Products::where('firm_id', Auth::user()->firm_id)->get();
@@ -168,7 +176,7 @@ class GuessClass
 
             $url = url('reports/' . $randomFileName);
 
-            if($print == 1){
+            if ($print == 1) {
                 $rs->obj = $url;
                 $rs->status = true;
                 return $rs;

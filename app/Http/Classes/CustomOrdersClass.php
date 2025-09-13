@@ -21,7 +21,7 @@ class CustomOrdersClass
 
     public function getCustomOrders()
     {
-               $rs = new ResultClass();
+        $rs = new ResultClass();
         try {
 
             $date = request()->get('date');
@@ -95,7 +95,6 @@ class CustomOrdersClass
             } else {
                 $rs->status = false;
             }
-         
         } catch (\Throwable $th) {
             $rs->status = false;
             $rs->message = $th->getMessage();
