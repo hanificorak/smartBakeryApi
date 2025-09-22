@@ -27,6 +27,7 @@ Route::post('/auth/register', [AuthController::class, 'register']);
 
 Route::middleware('auth:api')->group(function () {
     Route::post('/addToken', [SystemController::class, 'addToken']);
+    Route::post('/dataCheck', [SystemController::class, 'dataCheck']);
 
     Route::post('/products/getData', [DefinitionsController::class, 'getProducts']);
     Route::post('/products/addProduct', [DefinitionsController::class, 'addProduct']);
