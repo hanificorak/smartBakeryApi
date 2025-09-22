@@ -50,6 +50,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('/guess/getData', [GuessController::class, 'getData']);
     Route::post('/guess/totalGuessPdfMail', [GuessController::class, 'totalGuessPdfMail']);
+    Route::post('/guess/totalGuessList', [GuessController::class, 'totalGuessList']);
 
     Route::post('/profile/updateProfile', [ProfileController::class, 'updateProfile']);
     Route::post('/profile/updatePassword', [ProfileController::class, 'updatePassword']);
@@ -81,6 +82,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/customorders/getCustomOrders', [CustomOrdersController::class, 'getCustomOrders']);
     Route::post('/customorders/add', [CustomOrdersController::class, 'add']);
     Route::post('/customorders/delete', [CustomOrdersController::class, 'delete']);
+    Route::post('/customorders/printOrder', [CustomOrdersController::class, 'printOrder']);
 
     Route::post('/customordersReport/getReportData', [CustomOrderReportController::class, 'getReportData']);
     Route::post('/customordersReport/createReportMail', [CustomOrderReportController::class, 'createReportMail']);

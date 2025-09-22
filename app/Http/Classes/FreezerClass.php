@@ -136,10 +136,6 @@ class FreezerClass
 
             $query = Freezers::query()->where('freezers.firm_id', Auth::user()->firm_id)->join('freezer_defs', 'freezers.fr_id', '=', 'freezer_defs.id')->select('freezers.*', 'freezer_defs.name as fr_name', 'freezer_defs.id as fr_id')->orderBy('freezers.created_at', 'desc');
 
-            // if ($startDate && $endDate) {
-            //     $query->whereBetween('created_at', [Carbon::parse($startDate)->format('Y-m-d'), Carbon::parse($endDate)->format('Y-m-d')]);
-            // }
-
             if ($startDate != null) {
                 $startDate = Carbon::parse($startDate)->format('Y-m-d');
                 $query = $query->whereDate('freezers.created_at', '>=', $startDate);
@@ -160,7 +156,8 @@ class FreezerClass
             $fullPath = $reportPath . '/' . $randomFileName;
             $company = Settings::where('firm_id', Auth::user()->firm_id)->first();
 
-            $pdf = Pdf::loadView('reports.freezer-report', compact('company', 'query'));
+            $freezers = FreezerDefs::where('firm_id',Auth::user()->firm_id)->get();
+            $pdf = Pdf::loadView('reports.freezer-report', compact('company', 'query','startDate','endDate','freezers'));
             $pdf->setPaper('A4', 'portrait');
             $pdf->save($fullPath);
 

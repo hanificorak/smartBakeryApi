@@ -29,4 +29,12 @@ class GuessController
         }
     }
 
+    public function totalGuessList()
+    {
+        try {
+            return response()->json($this->class->totalGuessList());
+        } catch (\Throwable $th) {
+        }
+    }
+
 }

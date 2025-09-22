@@ -17,7 +17,8 @@ return [
     'waste' => 'Atık',
     'carryover' => 'Ertesi Güne Devir',
     'piece' => 'adet',
-    'generated_on' => 'Bu rapor :date tarihinde sistem tarafından otomatik olarak oluşturulmuştur.',
+    'generated_on' => 'Bu rapor  ',
+    'generated_on_2' => ' tarihinde sistem tarafından otomatik olarak oluşturulmuştur.',
     'rights_reserved' => 'Tüm hakları saklıdır.',
     'page' => 'Sayfa',
 

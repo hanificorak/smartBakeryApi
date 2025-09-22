@@ -35,4 +35,12 @@ class CustomOrdersController
         } catch (\Throwable $th) {
         }
     }
+
+    public function printOrder()
+    {
+        try {
+            return response()->json($this->class->printOrder());
+        } catch (\Throwable $th) {
+        }
+    }
 }

@@ -26,6 +26,13 @@ class GuessClass
         $rs = new ResultClass();
         try {
 
+            $lang = request()->get('lang');
+
+            if ($lang == null) {
+                $lang = 'de';
+            }
+            App::setLocale($lang);
+
 
             if ($weather == null) {
                 $weather = request()->get('weather_code'); // Bugünün hava durumu
@@ -99,7 +106,7 @@ class GuessClass
                 $rs->obj = [
                     'weather' => $weather,
                     'day' => $dayName,
-                    'message' => "Bugün için geçmiş veri bulunamadı."
+                    'message' => __("guess.no_data")
                 ];
                 return $rs;
             }
@@ -113,8 +120,16 @@ class GuessClass
 
             $suggestedProduction = round($avgSold * 1.05);
 
-            $weather_item = WeatherCodes::where('id', $weather)->select('description')->first();
+            $weather_item = WeatherCodes::where('id', $weather)->select('description', 'en', 'de')->first();
+            $w_name = $weather_item->description;
             $product_info = Products::where('id', $product_id)->select('name')->first();
+
+            if ($lang == "en") {
+                $w_name = $weather_item->en;
+            }
+            if ($lang == "de") {
+                $w_name = $weather_item->de;
+            }
 
             $rs->status = true;
             $rs->obj = [
@@ -125,8 +140,13 @@ class GuessClass
                 'average_diff' => $avgDiff,
                 'suggested_production' => $suggestedProduction,
                 'product' => $product_info->name,
-                'message' => "Bugün {$dayName}. Hava: {$weather_item->description}. Geçmişte ortalama {$avgProduced} üretip {$avgSold} satmışsın. 
-                          Bugün yaklaşık {$suggestedProduction} adet üretmen önerilir."
+                'message' => __('guess.production_message', [
+                    'dayName' => $dayName,
+                    'weather' => $w_name,
+                    'avgProduced' => $avgProduced,
+                    'avgSold' => $avgSold,
+                    'suggestedProduction' => $suggestedProduction,
+                ])
             ];
         } catch (\Throwable $th) {
             $rs->status = false;
@@ -144,6 +164,7 @@ class GuessClass
             $weather = request()->get('weather');
             $email = request()->get('email');
             $print = request()->get('print');
+            $prev = request()->get('prev');
             $lang = request()->get('lang');
 
             if ($lang == null) {
@@ -181,7 +202,56 @@ class GuessClass
                 $rs->status = true;
                 return $rs;
             }
+
+            if ($prev == 1) {
+                $rs->obj = "https://docs.google.com/gview?embedded=true&url=$url";
+                $rs->status = true;
+                return $rs;
+            }
+
+
             Mail::to([$email])->send(new ReportMail($url));
+
+
+            $rs->status = true;
+            $rs->message = "OK";
+        } catch (\Throwable $th) {
+            $rs->status = false;
+            $rs->message = $th->getMessage();
+        }
+
+        return $rs;
+    }
+
+    public function totalGuessList()
+    {
+        $rs = new ResultClass();
+        try {
+
+            $weather = request()->get('weather');
+            $lang = request()->get('lang');
+
+            if ($lang == null) {
+                $lang = 'de';
+            }
+
+            App::setLocale($lang);
+
+
+            $products = Products::where('firm_id', Auth::user()->firm_id)->get();
+            $datas = [];
+            foreach ($products as $key => $value) {
+                $product_id = $value->id;
+                $result = $this->getData($weather, $product_id);
+                $msg = $result->obj['message'];
+                $prod_name = $value->name;
+
+                array_push($datas, ["msg" => $msg, "prod_name" => $prod_name]);
+            }
+
+
+            $rs->obj = $datas;
+
 
 
             $rs->status = true;

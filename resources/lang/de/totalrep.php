@@ -18,7 +18,8 @@ return [
     'waste' => 'Abfall',
     'carryover' => 'Übertrag auf den nächsten Tag',
     'piece' => 'Stück',
-    'generated_on' => 'Dieser Bericht wurde am :date automatisch vom System erstellt.',
+    'generated_on' => 'Dieser Bericht ',
+    'generated_on_2' => ' wurde am angegebenen Datum automatisch vom System erstellt.',
     'rights_reserved' => 'Alle Rechte vorbehalten.',
     'page' => 'Seite',
 ];

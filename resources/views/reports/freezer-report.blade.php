@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -128,6 +129,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="header">
         <div class="company-name">SmartBakery</div>
@@ -145,6 +147,48 @@
             <table>
                 <thead>
                     <tr>
+                        <th style="width: 25%;">{{ __('freezer.report_date') }}</th>
+                        @foreach ($freezers as $item)
+                            <th style="width: 25%;">{{ $item->name }}</th>
+                        @endforeach
+                    </tr>
+                </thead>
+                <tbody>
+                    @php
+                        $period = new DatePeriod(
+                            new DateTime($startDate),
+                            new DateInterval('P1D'),
+                            new DateTime($endDate)->modify('+1 day'),
+                        );
+                    @endphp
+
+                    @foreach ($period as $date)
+                        <tr>
+                            <td>{{ $date->format('d.m.Y') }}</td>
+
+                            @foreach ($freezers as $freezer)
+                                @php
+
+                               $item = DB::table('freezers')->where('fr_id',$freezer->id)->whereDate('created_at',$date->format('Y-m-d'))->first(); 
+                       
+                                @endphp
+
+                                <td>
+                                   
+                                    {{($item == null ? '-' : $item->temp . ' °')}}
+                                </td>
+                            @endforeach
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+
+            {{-- <table>
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">{{ __('freezer.freezer_name') }}</th>
+
                         <th style="width: 25%;">{{ __('freezer.freezer_name') }}</th>
                         <th style="width: 20%;">{{ __('freezer.working_degree') }}</th>
                         <th style="width: 40%;">{{ __('freezer.description') }}</th>
@@ -159,7 +203,7 @@
                     </tr>
                   @endforeach
                 </tbody>
-            </table>
+            </table> --}}
         </div>
     </div>
 
@@ -168,4 +212,5 @@
         <div>{{ __('freezer.auto_generated_report') }}</div>
     </div>
 </body>
+
 </html>

@@ -12,4 +12,6 @@ return [
     'report_creation_date' => 'Erstellungsdatum des Berichts',
     'pcs' => 'Stück',
     'auto_generated_report' => 'Dieser Bericht wurde automatisch vom System erstellt.',
+    'pay_desc' => 'Zahlungsbeschreibung',
+
 ];

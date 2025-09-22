@@ -28,7 +28,7 @@ return [
     'no_data_for_date' => 'Für dieses Datum sind keine Daten vorhanden',
     'total_production' => 'Gesamtproduktion',
     'total_sales' => 'Gesamtverkauf',
-    'total_waste' => 'Gesamtabfall',
+    'total_waste' => 'Gesamtabfall',    
     'next_day_carry' => 'Auf den nächsten Tag übertragen',
     'all_rights_reserved' => 'Alle Rechte vorbehalten',
     'report_generated_automatically' => 'Dieser Bericht wurde automatisch vom System erstellt',

@@ -75,24 +75,6 @@ class CustomOrderReportClass
             App::setLocale($lang);
 
             $query = CustomOrders::with('product')->where('firm_id', Auth::user()->firm_id);
-            if ($customer_name != null) {
-                $query = $query->where('name_surname', 'like', '%' . $customer_name . '%');
-            }
-
-            if ($start_date != null) {
-                $start_date = Carbon::parse($start_date)->format('Y-m-d');
-                $query = $query->whereDate('created_at', '>=', $start_date);
-            }
-
-            if ($end_date != null) {
-                $end_date = Carbon::parse($end_date)->format('Y-m-d');
-                $query = $query->whereDate('created_at', '<=', $end_date);
-            }
-
-            if ($prodcut_id != null) {
-                $query = $query->where('product_id', $prodcut_id);
-            }
-
             $data = $query->get();
 
             $reportPath = public_path('reports');

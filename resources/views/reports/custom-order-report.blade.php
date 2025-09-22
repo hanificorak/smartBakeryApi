@@ -165,13 +165,37 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($data as $item)
+                @forelse($data as $order)
                     <tr>
-                        <td class="customer-name">{{ $item->name_surname }}</td>
-                        <td class="product-name">{{ $item->product->name }}</td>
-                        <td class="quantity">{{ $item->amount }}</td>
+                        <td class="customer-name" rowspan="{{ $order->orderProducts->count() }}">
+                            {{ $order->name_surname ?? '-' }}
+                            <br/>
+                            {{ __('customorder.pay_desc') }}: {{ $order->desc }}
+                        </td>
+                        @if ($order->orderProducts->isNotEmpty())
+                            @php $firstProduct = $order->orderProducts->first(); @endphp
+                            <td class="product-name">{{ $firstProduct->product->name ?? '-' }}</td>
+                            <td class="quantity">{{ $firstProduct->amount }}</td>
                     </tr>
-                @endforeach
+                    @foreach ($order->orderProducts->skip(1) as $orderProduct)
+                        <tr>
+                            <td class="product-name">{{ $orderProduct->product->name ?? '-' }}</td>
+                            <td class="quantity">{{ $orderProduct->amount }}</td>
+                        </tr>
+                    @endforeach
+                @else
+                    <td colspan="2" style="text-align:center; color:#7f8c8d;">
+                        {{ __('customorder.no_products_found') }}
+                    </td>
+                    </tr>
+                @endif
+            @empty
+                <tr>
+                    <td colspan="3" style="text-align:center; color:#7f8c8d;">
+                        {{ __('customorder.no_records_found') }}
+                    </td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
@@ -181,11 +205,15 @@
         <div class="summary-title">{{ __('customorder.report_summary') }}</div>
         <div class="summary-item">
             <span class="summary-label">{{ __('customorder.total_orders') }}:</span>
-            <span class="summary-value">{{ count($data) }} {{ __('customorder.pcs') }}</span>
+            <span class="summary-value">
+                {{ $data ? $data->count() : 0 }} {{ __('customorder.pcs') }}
+            </span>
         </div>
         <div class="summary-item">
             <span class="summary-label">{{ __('customorder.total_quantity') }}:</span>
-            <span class="summary-value">{{ ($data == null ? 0 : $data->sum('amount')) }} {{ __('customorder.pcs') }}</span>
+            <span class="summary-value">
+                {{ $data ? $data->flatMap->orderProducts->sum('amount') : 0 }} {{ __('customorder.pcs') }}
+            </span>
         </div>
         <div class="summary-item">
             <span class="summary-label">{{ __('customorder.report_creation_date') }}:</span>

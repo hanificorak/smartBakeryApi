@@ -12,4 +12,5 @@ return [
     'report_creation_date' => 'Rapor Oluşturma Tarihi',
     'pcs' => 'Adet',
     'auto_generated_report' => 'Bu rapor otomatik olarak sistem tarafından oluşturulmuştur.',
+    'pay_desc' => 'Ödeme Açıklaması',
 ];

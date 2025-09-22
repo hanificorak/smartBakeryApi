@@ -17,6 +17,12 @@
         }
 
         .header {
+            background: #2d3748;
+            color: white;
+            padding: 20px 40px;
+            margin: 0;
+            box-sizing: border-box;
+            position: relative;
             text-align: center;
             border-bottom: 3px solid #2c3e50;
             padding-bottom: 20px;
@@ -26,14 +32,31 @@
         .company-logo {
             font-size: 28px;
             font-weight: bold;
-            color: #2c3e50;
+            color: #ffffff;
             margin-bottom: 5px;
         }
 
         .company-info {
             font-size: 10px;
-            color: #7f8c8d;
+            color: #cbd5e0;
             margin-bottom: 15px;
+        }
+
+        .header-content {
+            display: table;
+        }
+
+        .company-info h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 0 5px 0;
+            color: #ffffff;
+        }
+
+        .company-info p {
+            font-size: 14px;
+            color: #cbd5e0;
+            margin: 0;
         }
 
         .report-title {
@@ -133,6 +156,137 @@
             color: #f39c12;
         }
 
+        /* YENİ: Oranlar için yan yana kart tasarımı */
+        .ratios-section {
+            margin: 20px 0;
+        }
+
+        .ratios-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .ratios-grid {
+            display: table;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 8px;
+        }
+
+        .ratios-row {
+            display: table-row;
+        }
+
+        .ratio-card {
+            display: table-cell;
+            width: 25%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 4px;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: relative;
+            vertical-align: middle;
+        }
+
+        .ratio-card.waste {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+        }
+
+        .ratio-card.sales {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+        }
+
+        .ratio-card.turnover {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .ratio-card.waste-sales {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            color: #333;
+        }
+
+        .ratio-label {
+            font-size: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color:black;
+            letter-spacing: 0.5px;
+            margin-bottom: 3px;
+            opacity: 0.9;
+        }
+
+        .ratio-value {
+            font-size: 13px;
+            font-weight: bold;
+            color:black;
+
+            margin-bottom: 4px;
+        }
+
+        .ratio-subtitle {
+            font-size: 6px;
+            color:black;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        /* Alternatif: Daha basit tasarım */
+        .ratios-simple {
+            display: table;
+            width: 100%;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .ratios-simple-row {
+            display: table-row;
+        }
+
+        .ratio-simple-cell {
+            display: table-cell;
+            width: 25%;
+            text-align: center;
+            padding: 8px;
+            border-right: 1px solid #dee2e6;
+        }
+
+        .ratio-simple-cell:last-child {
+            border-right: none;
+        }
+
+        .ratio-simple-label {
+            font-size: 10px;
+            color: #6c757d;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .ratio-simple-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .ratio-simple-value.danger {
+            color: #dc3545;
+        }
+
+        .ratio-simple-value.success {
+            color: #28a745;
+        }
+
+        .ratio-simple-value.warning {
+            color: #ffc107;
+        }
+
         .data-table {
             width: 100%;
             border-collapse: collapse;
@@ -181,22 +335,6 @@
         .page-break {
             page-break-after: always;
         }
-
-        /* @page {
-            margin: 20mm;
-
-            @bottom-right {
-                content: "@lang('totalrep.page')
-
-        " counter(page);
- font-family: "DejaVu Sans Mono",
-        monospace;
-        font-size: 10px;
-        color: #7f8c8d;
-        }
-        }
-
-        */
     </style>
 </head>
 
@@ -212,10 +350,24 @@
         $totalRemove += $item->total_remove_amount;
         $totalErt += $item->total_ert_count;
     }
+
+    // Oranlar
+    $wasteRatio = ($totalRemove / max($totalAmount, 1)) * 100;
+    $salesRatio = ($totalSales / max($totalAmount, 1)) * 100;
+    $turnoverRatio = ($totalErt / max($totalAmount, 1)) * 100;
+    $wasteSalesRatio = ($totalRemove / max($totalSales, 1)) * 100;
 @endphp
 
 <body>
 
+    <div class="header">
+        <div class="header-content">
+            <div class="company-info">
+                <h1>{{ $company->company_title }}</h1>
+                <p>{{ $company->company_address }} - {{ $company->company_phone }}</p>
+            </div>
+        </div>
+    </div>
 
     <!-- Report Meta Information -->
     <div class="report-meta">
@@ -226,7 +378,11 @@
             </div>
             <div class="meta-cell">
                 <div class="meta-label">{{ __('totalrep.date_range') }}:</div>
-                <div class="meta-value">{{ $startDate ?? '01.01.2024' }} - {{ $endDate ?? '31.12.2024' }}</div>
+                <div class="meta-value">
+                    {{ \Carbon\Carbon::parse($startDate)->format('d.m.Y H:i') ?? '01.01.2024' }}
+                    -
+                    {{ \Carbon\Carbon::parse($endDate)->format('d.m.Y H:i') ?? '31.12.2024' }}
+                </div>
             </div>
         </div>
     </div>
@@ -249,6 +405,58 @@
                 <div class="card-value danger">{{ $totalRemove }} {{ __('totalrep.piece') }}</div>
             </div>
         </div>
+
+        <!-- YENİ: Gradient kartlar ile oranlar -->
+        <div class="ratios-section">
+            <div class="ratios-grid">
+                <div class="ratios-row">
+                    <div class="ratio-card waste">
+                        <div class="ratio-label">{{ __('report.waste_ratio') }}</div>
+                        <div class="ratio-value">{{ number_format($wasteRatio, 1) }}%</div>
+                        <div class="ratio-subtitle">Fire Oranı</div>
+                    </div>
+                    <div class="ratio-card sales">
+                        <div class="ratio-label">{{ __('report.sales_ratio') }}</div>
+                        <div class="ratio-value">{{ number_format($salesRatio, 1) }}%</div>
+                        <div class="ratio-subtitle">Satış Oranı</div>
+                    </div>
+                    <div class="ratio-card turnover">
+                        <div class="ratio-label">{{ __('report.turnover_ratio') }}</div>
+                        <div class="ratio-value">{{ number_format($turnoverRatio, 1) }}%</div>
+                        <div class="ratio-subtitle">Devir Oranı</div>
+                    </div>
+                    <div class="ratio-card waste-sales">
+                        <div class="ratio-label">{{ __('report.waste_sales_ratio') }}</div>
+                        <div class="ratio-value">{{ number_format($wasteSalesRatio, 1) }}%</div>
+                        <div class="ratio-subtitle">Fire/Satış</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ALTERNATİF: Basit tasarım (yukarıdaki yerine kullanabilirsiniz) -->
+        <!-- 
+        <div class="ratios-simple">
+            <div class="ratios-simple-row">
+                <div class="ratio-simple-cell">
+                    <div class="ratio-simple-label">{{ __('report.waste_ratio') }}</div>
+                    <div class="ratio-simple-value danger">{{ number_format($wasteRatio, 1) }}%</div>
+                </div>
+                <div class="ratio-simple-cell">
+                    <div class="ratio-simple-label">{{ __('report.sales_ratio') }}</div>
+                    <div class="ratio-simple-value success">{{ number_format($salesRatio, 1) }}%</div>
+                </div>
+                <div class="ratio-simple-cell">
+                    <div class="ratio-simple-label">{{ __('report.turnover_ratio') }}</div>
+                    <div class="ratio-simple-value">{{ number_format($turnoverRatio, 1) }}%</div>
+                </div>
+                <div class="ratio-simple-cell">
+                    <div class="ratio-simple-label">{{ __('report.waste_sales_ratio') }}</div>
+                    <div class="ratio-simple-value warning">{{ number_format($wasteSalesRatio, 1) }}%</div>
+                </div>
+            </div>
+        </div>
+        -->
     </div>
 
     <!-- Data Table -->
@@ -260,7 +468,6 @@
                 <th style="width: 15%;" class="text-right">{{ __('totalrep.production') }}</th>
                 <th style="width: 15%;" class="text-right">{{ __('totalrep.sales') }}</th>
                 <th style="width: 15%;" class="text-right">{{ __('totalrep.waste') }}</th>
-                <th style="width: 15%;" class="text-right">{{ __('totalrep.carryover') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -271,7 +478,6 @@
                     <td class="text-right">{{ $item->total_amount }}</td>
                     <td class="text-right">{{ $item->total_sales_amount }}</td>
                     <td class="text-right">{{ $item->total_remove_amount }}</td>
-                    <td class="text-right">{{ $item->total_ert_amount }}</td>
                 </tr>
             @endforeach
         </tbody>
@@ -279,7 +485,7 @@
 
     <!-- Footer -->
     <div class="footer">
-        <p>{{ __('totalrep.generated_on') }} {{ date('d.m.Y H:i') }}</p>
+        <p>{{ __('totalrep.generated_on') }} {{ date('d.m.Y H:i') }} {{ __('totalrep.generated_on_2') }} </p>
         <p>{{ $company->company_title ?? __('totalrep.company_name') }} - {{ __('totalrep.rights_reserved') }}</p>
     </div>
 </body>
