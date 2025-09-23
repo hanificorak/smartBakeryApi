@@ -96,10 +96,18 @@ class StockClass
                 $desc = request()->get('desc');
             }
 
-            $check = DaysStocks::where('product_id',$product_id)->where('firm_id',Auth::user()->firm_id)->whereDate('created_at',Carbon::now())->exists();
-            if($check){
+
+            $check = DaysStocks::where('product_id', $product_id)
+                ->where('firm_id', Auth::user()->firm_id)
+                ->whereDate('created_at', Carbon::now())
+                ->where(function ($q) {
+                    $q->whereNull('desc') // desc NULL ise
+                        ->orWhere('desc', '!=', 'Ertesi günden aktarılan kayıt.'); // veya farklı bir değer ise
+                })
+                ->exists();
+            if ($check) {
                 $rs->status = false;
-                $rs->sub_info ="rec_mev";
+                $rs->sub_info = "rec_mev";
                 return $rs;
             }
 

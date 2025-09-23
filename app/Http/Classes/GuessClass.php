@@ -212,7 +212,6 @@ class GuessClass
 
             Mail::to([$email])->send(new ReportMail($url));
 
-
             $rs->status = true;
             $rs->message = "OK";
         } catch (\Throwable $th) {
