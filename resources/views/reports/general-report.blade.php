@@ -397,7 +397,7 @@
         <div class="summary-cards">
             <div class="summary-card">
                 <div class="card-title">{{ __('totalrep.total_production') }}</div>
-                <div class="card-value">{{ $totalAmount }} {{ __('totalrep.piece') }}</div>
+                <div class="card-value " style="color:blue;">{{ $totalAmount }} {{ __('totalrep.piece') }}</div>
             </div>
             <div class="summary-card">
                 <div class="card-title">{{ __('totalrep.total_sales') }}</div>
