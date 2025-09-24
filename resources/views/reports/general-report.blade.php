@@ -47,6 +47,7 @@
         }
 
         .company-info h1 {
+            text-align: left;
             font-size: 28px;
             font-weight: 700;
             margin: 0 0 5px 0;
@@ -55,6 +56,8 @@
 
         .company-info p {
             font-size: 14px;
+            text-align: left;
+
             color: #cbd5e0;
             margin: 0;
         }
