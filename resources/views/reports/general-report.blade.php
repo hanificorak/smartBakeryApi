@@ -37,6 +37,7 @@
         }
 
         .company-info {
+            float:left;
             font-size: 10px;
             color: #cbd5e0;
             margin-bottom: 15px;
