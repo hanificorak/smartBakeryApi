@@ -303,6 +303,10 @@
                             <p>{{ __('report.weather') }}:
                                 {{ $day['data'] != null && count($day['data']) ? $day['data'][0]->weather->description : '' }}
                             </p>
+                        @else
+                            <p>
+                              
+                            </p>
                         @endif
                     </div>
                 </div>
