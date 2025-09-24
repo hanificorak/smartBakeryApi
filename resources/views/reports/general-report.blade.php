@@ -37,6 +37,7 @@
         }
 
         .company-info {
+            float: left;
             font-size: 10px;
             color: #cbd5e0;
             margin-bottom: 15px;
@@ -363,8 +364,8 @@
     <div class="header">
         <div class="header-content">
             <div class="company-info">
-                <h1 style="float:left">{{ $company->company_title }}</h1>
-                <p style="float:left">{{ $company->company_address }} - {{ $company->company_phone }}</p>
+                <h1 >{{ $company->company_title }}</h1>
+                <p>{{ $company->company_address }} - {{ $company->company_phone }}</p>
             </div>
         </div>
     </div>
