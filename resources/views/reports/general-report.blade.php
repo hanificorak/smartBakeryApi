@@ -37,10 +37,10 @@
         }
 
         .company-info {
-            float:left;
             font-size: 10px;
             color: #cbd5e0;
             margin-bottom: 15px;
+            text-align: left;
         }
 
         .header-content {
@@ -189,7 +189,7 @@
             padding: 8px 4px;
             text-align: center;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             position: relative;
             vertical-align: middle;
         }
@@ -215,7 +215,7 @@
             font-size: 8px;
             font-weight: 600;
             text-transform: uppercase;
-            color:black;
+            color: black;
             letter-spacing: 0.5px;
             margin-bottom: 3px;
             opacity: 0.9;
@@ -224,14 +224,14 @@
         .ratio-value {
             font-size: 13px;
             font-weight: bold;
-            color:black;
+            color: black;
 
             margin-bottom: 4px;
         }
 
         .ratio-subtitle {
             font-size: 6px;
-            color:black;
+            color: black;
             opacity: 0.8;
             font-style: italic;
         }
@@ -436,7 +436,7 @@
         </div>
 
         <!-- ALTERNATİF: Basit tasarım (yukarıdaki yerine kullanabilirsiniz) -->
-        <!-- 
+        <!--
         <div class="ratios-simple">
             <div class="ratios-simple-row">
                 <div class="ratio-simple-cell">
