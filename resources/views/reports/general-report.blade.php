@@ -363,7 +363,7 @@
     <div class="header">
         <div class="header-content">
             <div class="company-info">
-                <h1 >{{ $company->company_title }}</h1>
+                <h1>{{ $company->company_title }}</h1>
                 <p>{{ $company->company_address }} - {{ $company->company_phone }}</p>
             </div>
         </div>
