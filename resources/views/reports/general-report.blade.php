@@ -156,7 +156,7 @@
         }
 
         .card-value.blue {
-            color: #87CEFA;
+            color: #0000FF;
         }
 
         .card-value.warning {
