@@ -99,6 +99,7 @@ class GuessClass
                 ->where('weather_code', $weather)
                 ->get();
 
+
             $count = $data->count();
 
             if ($count == 0) {

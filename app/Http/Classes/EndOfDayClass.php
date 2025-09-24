@@ -70,7 +70,13 @@ class EndOfDayClass
                 $mdl->save();
 
                 $mdl_day = null;
+
                 if ($value['ert_status'] == true) {
+
+                    if($current == 0){
+                        $current = $amount;
+                    }
+
                     $mdl_day = new DaysStocks();
                     $mdl_day->created_at = Carbon::now()->addDay(1);
                     $mdl_day->create_user_id = Auth::user()->id;

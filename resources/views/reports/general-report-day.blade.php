@@ -35,7 +35,7 @@
             padding-bottom: 50px;
             box-sizing: border-box;
             page-break-inside: avoid;
-            page-break-after: always;
+            /* page-break-after: always; */
             overflow: hidden;
         }
 
