@@ -5,7 +5,7 @@ return [
     'freezer_report' => 'Freezer Report',
     'report_date' => 'Report Date',
     'report_summary' => 'Report Summary',
-    'freezer_summary_text' => 'This report shows the status and working degrees of the freezers in the SmartBakery system.',
+    'freezer_summary_text' => 'This report shows the defined cabinets and cooling temperatures in the smartBakery system.',
     'freezer_name' => 'Freezer Name',
     'working_degree' => 'Working Degree',
     'description' => 'Description',

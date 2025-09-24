@@ -5,7 +5,7 @@ return [
     'freezer_report' => 'Dolap Raporu',
     'report_date' => 'Rapor Tarihi',
     'report_summary' => 'Rapor Özeti',
-    'freezer_summary_text' => 'Bu rapor, smartBakery sistemindeki dolap durumlarını ve çalışma derecelerini göstermektedir.',
+    'freezer_summary_text' => 'Bu rapor, smartBakery sistemindeki tanımlanış dolapları ve soğutma derecelerini göstermektedir.',
     'freezer_name' => 'Dolap Adı',
     'working_degree' => 'Çalışma Derecesi',
     'description' => 'Açıklama',
