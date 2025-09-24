@@ -40,7 +40,6 @@
             font-size: 10px;
             color: #cbd5e0;
             margin-bottom: 15px;
-            text-align: left;
         }
 
         .header-content {
