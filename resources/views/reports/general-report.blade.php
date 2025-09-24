@@ -155,6 +155,10 @@
             color: #e74c3c;
         }
 
+        .card-value.blue {
+            color: blue;
+        }
+
         .card-value.warning {
             color: #f39c12;
         }
@@ -397,7 +401,7 @@
         <div class="summary-cards">
             <div class="summary-card">
                 <div class="card-title">{{ __('totalrep.total_production') }}</div>
-                <div class="card-value " style="color:blue;">{{ $totalAmount }} {{ __('totalrep.piece') }}</div>
+                <div class="card-value blue" >{{ $totalAmount }} {{ __('totalrep.piece') }}</div>
             </div>
             <div class="summary-card">
                 <div class="card-title">{{ __('totalrep.total_sales') }}</div>
