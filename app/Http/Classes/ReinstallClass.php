@@ -29,6 +29,9 @@ class ReinstallClass
             DB::table('days_info')->whereDate('created_at',Carbon::now())->delete();
             DB::table('days_stocks')->whereDate('created_at',Carbon::now())->delete();
             DB::table('end_of_days')->whereDate('created_at',Carbon::now())->delete();
+            DB::table('holidays')->whereDate('created_at',Carbon::now())->delete();
+            DB::table('freezers')->whereDate('created_at',Carbon::now())->delete();
+            DB::table('custom_orders')->whereDate('created_at',Carbon::now())->delete();
 
 
             DB::commit();
