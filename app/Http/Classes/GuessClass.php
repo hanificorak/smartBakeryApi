@@ -206,6 +206,7 @@ class GuessClass
 
             if ($prev == 1) {
                 $rs->obj = "https://docs.google.com/gview?embedded=true&url=$url";
+                $rs->sub_info = $url;
                 $rs->status = true;
                 return $rs;
             }
