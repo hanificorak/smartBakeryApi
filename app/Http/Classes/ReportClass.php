@@ -269,7 +269,7 @@ class ReportClass
                 Mail::to($mail)->send(new ReportMail($url, $startDate, $endDate));
                 $rs->obj = $url;
             } else {
-                $rs->sub_info = "https://docs.google.com/gview?embedded=true&url=$url";
+                $rs->sub_info = $url;
                 $rs->obj = $url;
             }
 
@@ -411,7 +411,7 @@ class ReportClass
             } else {
                 $rs->obj = $url;
 
-                $rs->sub_info = "https://docs.google.com/gview?embedded=true&url=$url";
+                $rs->sub_info = $url;
             }
 
             $rs->status = true;
