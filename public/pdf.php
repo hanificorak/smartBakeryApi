@@ -1,43 +1,23 @@
 <?php
-// PDF URL'sini al
-if (!isset($_GET['path'])) {
-    die("PDF yolu belirtilmemiş.");
-}
+$pdfPath = $_GET['path'] ?? '';
+if (!$pdfPath) die('PDF yolu yok.');
 
-$pdfUrl = $_GET['path'];
-
-// Güvenlik için sadece belirli alanlardan veya domainlerden PDF yüklemeye izin vermek iyi olur
-$allowedDomains = ['example.com', 'anotherdomain.com', 'nubifysoftware.com','orimi.com'];
-$parsedUrl = parse_url($pdfUrl);
-
-
+$pdfContent = file_get_contents($pdfPath);
+$base64 = base64_encode($pdfContent);
 ?>
 
 <!DOCTYPE html>
-<html lang="tr">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF Viewer</title>
-    <style>
-        body,
-        html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-        }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-    </style>
 </head>
 
-<body>
-    <iframe src="<?php echo htmlspecialchars($pdfUrl); ?>"></iframe>
+<body style="margin:0;">
+    <iframe
+        src="data:application/pdf;base64,<?php echo $base64; ?>"
+        style="width:100%; height:100%; border:none;">
+    </iframe>
 </body>
 
 </html>
