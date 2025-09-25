@@ -169,8 +169,14 @@
                     <tr>
                         <td class="customer-name" rowspan="{{ $order->orderProducts->count() }}">
                             {{ $order->name_surname ?? '-' }}
-                            <br/>
+                            <br />
                             {{ __('customorder.pay_desc') }}: {{ $order->desc }}
+                            <br />
+                            {{ __('customorder.delivery_date') }}:
+                            {{ \Carbon\Carbon::parse($order->delivery_date)->format('d.m.Y') }}
+                            <br />
+
+
                         </td>
                         @if ($order->orderProducts->isNotEmpty())
                             @php $firstProduct = $order->orderProducts->first(); @endphp

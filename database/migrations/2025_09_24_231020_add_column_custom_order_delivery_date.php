@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('custom_orders', function (Blueprint $table) {
-            $table->string('desc')->nullable();
+         Schema::table('custom_orders', function (Blueprint $table) {
+            $table->date('delivery_date')->nullable();
         });
     }
 

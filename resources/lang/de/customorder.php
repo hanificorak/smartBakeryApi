@@ -13,5 +13,7 @@ return [
     'pcs' => 'Stück',
     'auto_generated_report' => 'Dieser Bericht wurde automatisch vom System erstellt.',
     'pay_desc' => 'Zahlungsbeschreibung',
+    'delivery_date' => 'Liefertermin'
+
 
 ];

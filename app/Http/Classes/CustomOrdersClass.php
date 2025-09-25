@@ -52,6 +52,7 @@ class CustomOrdersClass
             $products = request()->get('products');
             $desc = request()->get('desc');
             $id = request()->get('id');
+            $delivery_date = request()->get('delivery_date');
 
             DB::beginTransaction();
 
@@ -73,6 +74,7 @@ class CustomOrdersClass
             $mdl->product_id = -1;
             $mdl->amount = 1;
             $mdl->desc = $desc;
+            $mdl->delivery_date = Carbon::parse($delivery_date)->format('Y-m-d');
 
             if ($mdl->save()) {
 
@@ -132,6 +134,7 @@ class CustomOrdersClass
             $id = request()->get('id');
             $lang = request()->get('lang');
             $mail = request()->get('mail');
+            $print = request()->get('print');
 
             if ($lang == null) {
                 $lang = 'de';
@@ -166,7 +169,11 @@ class CustomOrdersClass
             $url = url('reports/' . $randomFileName);
 
             $rs->status = true;
-            Mail::to($mail)->send(new ReportMail($url));
+
+            if ($print == 0) {
+                Mail::to($mail)->send(new ReportMail($url));
+            }
+            $rs->obj = $url;
         } catch (\Throwable $th) {
             $rs->status = false;
             $rs->message = $th->getMessage();

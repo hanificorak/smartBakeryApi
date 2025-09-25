@@ -5,7 +5,7 @@ return [
     'freezer_report' => 'Gefrierschrank-Bericht',
     'report_date' => 'Berichtsdatum',
     'report_summary' => 'Berichtszusammenfassung',
-    'freezer_summary_text' => 'Dieser Bericht zeigt die identifizierten Schränke und kühlgrade im smartBakery-System.',
+    'freezer_summary_text' => 'Dieser Bericht zeigt den die Bezeichnung und die Temperatur grad der Gefrierschränke im SmartBakery-System an.',
     'freezer_name' => 'Gefrierschrank-Name',
     'working_degree' => 'Arbeitsgrad',
     'description' => 'Beschreibung',
