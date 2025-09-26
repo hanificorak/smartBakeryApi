@@ -170,6 +170,8 @@
                         <td class="customer-name" rowspan="{{ $order->orderProducts->count() }}">
                             {{ $order->name_surname ?? '-' }}
                             <br />
+                            {{ __('customorder.phone') }}: {{ $order->phone }}
+                            <br />
                             {{ __('customorder.pay_desc') }}: {{ $order->desc }}
                             <br />
                             {{ __('customorder.delivery_date') }}:

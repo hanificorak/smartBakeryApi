@@ -13,5 +13,6 @@ return [
     'pcs' => 'Adet',
     'auto_generated_report' => 'Bu rapor otomatik olarak sistem tarafından oluşturulmuştur.',
     'pay_desc' => 'Ödeme Açıklaması',
-    'delivery_date'=>'Teslim Tarihi'
+    'delivery_date'=>'Teslim Tarihi',
+    'phone'=>'Telefon Numarası'
 ];
