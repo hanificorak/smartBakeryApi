@@ -54,4 +54,27 @@ class StockController
         }
     }
 
+    public function allProducts()
+    {
+        try {
+            return response()->json($this->class->allProducts());
+        } catch (\Throwable $th) {
+        }
+    }
+
+    public function allProductsSave()
+    {
+        try {
+            return response()->json($this->class->allProductsSave());
+        } catch (\Throwable $th) {
+        }
+    }
+
+    public function amountUpdate()
+    {
+        try {
+            return response()->json($this->class->amountUpdate());
+        } catch (\Throwable $th) {
+        }
+    }
 }

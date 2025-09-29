@@ -38,6 +38,9 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/stocks/saveStock', [StockController::class, 'saveStock']);
     Route::post('/stocks/getStockData', [StockController::class, 'getStockData']);
     Route::post('/stocks/stockDelete', [StockController::class, 'stockDelete']);
+    Route::post('/stocks/allProductData', [StockController::class, 'allProducts']);
+    Route::post('/stocks/allProductsSave', [StockController::class, 'allProductsSave']);
+    Route::post('/stocks/amountUpdate', [StockController::class, 'amountUpdate']);
 
     Route::post('/endofdays/getEndOfListData', [EndOfDayController::class, 'getEndOfListData']);
     Route::post('/endofdays/addEndOfData', [EndOfDayController::class, 'addEndOfData']);

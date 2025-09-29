@@ -3,6 +3,7 @@
 namespace App\Http\Classes;
 
 use App\Http\Classes\Tools\ResultClass;
+use App\Models\DaysInfo;
 use App\Models\DaysStocks;
 use App\Models\EndOfDays;
 use App\Models\Products;
@@ -102,7 +103,7 @@ class StockClass
                 ->whereDate('created_at', Carbon::now())
                 ->where(function ($q) {
                     $q->whereNull('desc') // desc NULL ise
-                        ->orWhere('desc', '!=', 'Ertesi günden aktarılan kayıt.'); // veya farklı bir değer ise
+                    ->orWhere('desc', '!=', 'Ertesi günden aktarılan kayıt.'); // veya farklı bir değer ise
                 })
                 ->exists();
             if ($check) {
@@ -182,6 +183,92 @@ class StockClass
 
         unset($stock_id);
         unset($check);
+        return $rs;
+    }
+
+    public function allProducts()
+    {
+        $rs = new ResultClass();
+        try {
+
+
+            $all_pr = Products::where('firm_id',Auth::user()->firm_id)->get();
+            foreach ($all_pr as $key => $pr) {
+                $last_item = DaysInfo::where('product_id', $pr->id)
+                    ->whereDate('created_at', Carbon::now()->subDay()) // addDay(-1) yerine subDay()
+                    ->first();
+
+
+                $all_pr[$key]->quantity = 0;
+                if ($last_item) {
+                    $all_pr[$key]->last_quantity = $last_item->sales_amount;
+                }else{
+                    $all_pr[$key]->last_quantity = 0;
+                }
+            }
+
+            $rs->obj = $all_pr;
+            $rs->status = true;
+        } catch (\Throwable $th) {
+            $rs->status = false;
+            $rs->message = $th->getMessage();
+        }
+
+
+        return $rs;
+    }
+
+    public function allProductsSave()
+    {
+        $rs = new ResultClass();
+        try {
+
+            $datas = request()->get('data');
+
+            foreach ($datas as $key => $value) {
+                $product_id = $value['id'];
+                $amount = $value['quantity'];
+
+                if($amount == 0){
+                    continue;
+                }
+
+                $this->saveStock($product_id, $amount, null);
+            }
+
+
+            $rs->status = true;
+
+        } catch (\Throwable $th) {
+            $rs->status = false;
+            $rs->message = $th->getMessage();
+        }
+        return $rs;
+    }
+
+    public function amountUpdate()
+    {
+        $rs = new ResultClass();
+        try {
+
+            $id = request()->get('id');
+            $amount = request()->get('amount');
+
+            $mdl = DaysStocks::find($id);
+            $mdl->update_user_id = Auth::user()->id;
+            $mdl->updated_at = Carbon::now();
+            $mdl->amount = $amount;
+
+            if ($mdl->save()) {
+                $rs->status = true;
+            }else{
+                $rs->status = false;
+            }
+
+        } catch (\Throwable $th) {
+            $rs->status = false;
+            $rs->message = $th->getMessage();
+        }
         return $rs;
     }
 }
