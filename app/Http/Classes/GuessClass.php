@@ -84,6 +84,8 @@ class GuessClass
                     'average_diff' => $avgDiff,
                     'suggested_production' => $suggestedProduction,
                     'product' => $product_info->name,
+                    'data_status' => true,
+
                     'message' => "Geçen sene bugün {$holiday->name} idi. Satış ortalaması {$avgSold}. Bugün yaklaşık {$suggestedProduction} adet üretmen önerilir."
                 ];
                 return $rs;
@@ -107,6 +109,7 @@ class GuessClass
                 $rs->obj = [
                     'weather' => $weather,
                     'day' => $dayName,
+                    'data_status' => false,
                     'message' => __("guess.no_data")
                 ];
                 return $rs;
@@ -134,19 +137,21 @@ class GuessClass
 
             $rs->status = true;
             $rs->obj = [
-                'weather' => $weather_item->description,
+                'weather' => $w_name,
                 'day' => $dayName,
                 'average_sold' => $avgSold,
                 'average_produced' => $avgProduced,
                 'average_diff' => $avgDiff,
                 'suggested_production' => $suggestedProduction,
+                'data_status' => true,
+
                 'product' => $product_info->name,
                 'message' => __('guess.production_message', [
                     'dayName' => $dayName,
                     'weather' => $w_name,
                     'avgProduced' => $avgProduced,
                     'avgSold' => $avgSold,
-                    'suggestedProduction' => $suggestedProduction,
+                    'suggestedProduction' => $suggestedProduction, // tavsiye sayı
                 ])
             ];
         } catch (\Throwable $th) {
@@ -183,7 +188,15 @@ class GuessClass
                 $msg = $result->obj['message'];
                 $prod_name = $value->name;
 
-                array_push($datas, ["msg" => $msg, "prod_name" => $prod_name]);
+                $count = 0;
+                $day = null;
+                $weather_item = null;
+                if ($result->obj['data_status']) {
+                    $count = $result->obj['suggested_production'];
+                    $day = $result->obj['day'];
+                    $weather_item = $result->obj['weather'];
+                }
+                array_push($datas, ["msg" => $msg, "prod_name" => $prod_name, "count" => $count, "day" => $day, "weather" => $weather_item]);
             }
 
             $reportPath = public_path('reports');
@@ -252,7 +265,6 @@ class GuessClass
 
 
             $rs->obj = $datas;
-
 
 
             $rs->status = true;

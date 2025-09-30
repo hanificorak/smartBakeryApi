@@ -159,28 +159,34 @@
             <thead>
                 <tr>
                     <th style="width: 35%;">{{ __('guess.product_name') }}</th>
-                    <th style="width: 65%;">{{ __('guess.estimated_message') }}</th>
+                    <th style="width: 35%;">Tarih</th>
+                    <th style="width: 35%;">Adet</th>
+                    <th style="width: 35%;">Gün</th>
+                    <th style="width: 35%;">Hava Durumu</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($datas as $row)
                     <tr>
                         <td>{{ $row['prod_name'] }}</td>
-                        <td>{{ $row['msg'] }}</td>
+                        <td>{{ \Carbon\Carbon::now()->format('d.m.Y') }}</td>
+                        <td>{{ $row["day"]}}</td>
+                        <td>{{ $row["count"]}}</td>
+                        <td>{{ $row["weather"]}}</td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
 
         <div class="summary-box">
-            <strong>{{ __('guess.note') }}:</strong> 
+            <strong>{{ __('guess.note') }}:</strong>
             {{ __('guess.report_note') }}
         </div>
     </main>
 
     <div class="footer">
-        SmartBakery &copy; {{ \Carbon\Carbon::now()->format('Y') }} | 
-        {{ __('guess.all_rights_reserved') }} | 
+        SmartBakery &copy; {{ \Carbon\Carbon::now()->format('Y') }} |
+        {{ __('guess.all_rights_reserved') }} |
         {{ __('guess.page') }} <script type="text/php">echo $PAGE_NUM;</script>
     </div>
 </body>
