@@ -31,7 +31,7 @@ class SystemController
     {
         try {
 
-            $product_entry = DaysStocks::where('firm_id', Auth::user()->firm_id)->whereDate('created_at', Carbon::now())->where('desc','<>','Ertesi günden aktarılan kayıt.')->whereNotNull('desc')->exists();
+            $product_entry = DaysStocks::where('firm_id', Auth::user()->firm_id)->whereDate('created_at', Carbon::now())->where('desc','<>','Ertesi günden aktarılan kayıt.')->whereNull('desc')->exists();
             $end_of_days = EndOfDays::where('firm_id', Auth::user()->firm_id)->whereDate('created_at', Carbon::now())->exists();
             $freezer = Freezers::where('firm_id', Auth::user()->firm_id)->whereDate('created_at', Carbon::now())->exists();
 
