@@ -377,7 +377,6 @@ class ReportClass
             }
 
 
-
             // Reports klasörü oluştur (yoksa)
             $reportPath = public_path('reports');
             if (!file_exists($reportPath)) {
