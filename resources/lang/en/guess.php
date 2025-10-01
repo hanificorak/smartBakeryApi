@@ -13,7 +13,9 @@ return [
     "weather" => "Weather",
     'production_message' => "Today is :dayName. Weather: :weather. In the past, you produced an average of :avgProduced and sold :avgSold. Today, it is recommended to produce about :suggestedProduction units.",
     'no_data' => "No historical data found for today.",
-    'Ertesi günden aktarılan kayıt.' => 'Record transferred from the next day.'
+    'Ertesi günden aktarılan kayıt.' => 'Record transferred from the next day.',
+    'day'=>"Day",
+    'amount'=>"Quantity"
 
 
 ];

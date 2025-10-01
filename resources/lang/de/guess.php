@@ -13,5 +13,7 @@ return [
     "weather" => "Wetter",
     'production_message' => "Heute ist :dayName. Wetter: :weather. In der Vergangenheit hast du im Durchschnitt :avgProduced produziert und :avgSold verkauft. Heute wird empfohlen, etwa :suggestedProduction Stück zu produzieren.",
     'no_data' => "Für heute wurden keine historischen Daten gefunden.",
-    'Ertesi günden aktarılan kayıt.' => 'Datensatz von gestern übertragen.'
+    'Ertesi günden aktarılan kayıt.' => 'Datensatz von gestern übertragen.',
+    'day' => "Tag",
+'amount' => "Menge"
 ];

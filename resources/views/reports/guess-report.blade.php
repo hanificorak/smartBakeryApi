@@ -85,14 +85,33 @@
             margin-bottom: 40px;
         }
 
-        table {
+        .table-container {
+            display: table;
             width: 100%;
-            border-collapse: collapse;
             margin-top: 20px;
         }
 
+        .table-column {
+            display: table-cell;
+            width: 48%;
+            vertical-align: top;
+        }
+
+        .table-column:first-child {
+            padding-right: 15px;
+        }
+
+        .table-column:last-child {
+            padding-left: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
         th, td {
-            padding: 10px 15px;
+            padding: 8px 10px;
             text-align: left;
             border: 1px solid #e0e0e0;
         }
@@ -100,14 +119,14 @@
         th {
             background: #eceff1;
             color: #212121;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
         }
 
         td {
             background-color: #ffffff;
-            font-size: 11px;
+            font-size: 10px;
             border-bottom: 1px solid #e0e0e0;
         }
 
@@ -143,51 +162,81 @@
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="brand">
-            <span class="name">SmartBakery</span>
-        </div>
-        <div class="report-info">
-            <br/>
-            <div class="report-date">{{ \Carbon\Carbon::now()->format('d.m.Y H:i') }}</div>
-        </div>
+<div class="header">
+    <div class="brand">
+        <span class="name">SmartBakery</span>
     </div>
+    <div class="report-info">
+        <br/>
+        <div class="report-date">{{ \Carbon\Carbon::now()->format('d.m.Y H:i') }}</div>
+        <br/>
+        <div class="report-date">Hava Durumu: {{($datas != null ? $datas[0]['weather'] : '') }}</div>
+    </div>
+</div>
 
-    <main>
-        <div class="section-header">{{ __('guess.report_details') }}</div>
-        <table>
-            <thead>
+<main>
+    <div class="section-header">{{ __('guess.report_details') }}</div>
+
+    @php
+        $halfCount = ceil(count($datas) / 2);
+        $firstHalf = array_slice($datas, 0, $halfCount);
+        $secondHalf = array_slice($datas, $halfCount);
+    @endphp
+
+    <div class="table-container">
+        <div class="table-column">
+            <table>
+                <thead>
                 <tr>
-                    <th style="width: 35%;">{{ __('guess.product_name') }}</th>
-                    <th style="width: 35%;">Tarih</th>
-                    <th style="width: 35%;">Adet</th>
-                    <th style="width: 35%;">Gün</th>
-                    <th style="width: 35%;">Hava Durumu</th>
+                    <th style="width: 50%;">{{ __('guess.product_name') }}</th>
+                    <th style="width: 25%;">{{__('guess.day')}}</th>
+                    <th style="width: 25%;">{{__('guess.amount')}}</th>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach ($datas as $row)
+                </thead>
+                <tbody>
+                @foreach ($firstHalf as $row)
                     <tr>
                         <td>{{ $row['prod_name'] }}</td>
-                        <td>{{ \Carbon\Carbon::now()->format('d.m.Y') }}</td>
                         <td>{{ $row["day"]}}</td>
                         <td>{{ $row["count"]}}</td>
-                        <td>{{ $row["weather"]}}</td>
                     </tr>
                 @endforeach
-            </tbody>
-        </table>
-
-        <div class="summary-box">
-            <strong>{{ __('guess.note') }}:</strong>
-            {{ __('guess.report_note') }}
+                </tbody>
+            </table>
         </div>
-    </main>
 
-    <div class="footer">
-        SmartBakery &copy; {{ \Carbon\Carbon::now()->format('Y') }} |
-        {{ __('guess.all_rights_reserved') }} |
-        {{ __('guess.page') }} <script type="text/php">echo $PAGE_NUM;</script>
+        <div class="table-column">
+            <table>
+                <thead>
+                <tr>
+                    <th style="width: 50%;">{{ __('guess.product_name') }}</th>
+                    <th style="width: 25%;">{{__('guess.day')}}</th>
+                    <th style="width: 25%;">{{__('guess.amount')}}</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach ($secondHalf as $row)
+                    <tr>
+                        <td>{{ $row['prod_name'] }}</td>
+                        <td>{{ $row["day"]}}</td>
+                        <td>{{ $row["count"]}}</td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
+
+    <div class="summary-box">
+        <strong>{{ __('guess.note') }}:</strong>
+        {{ __('guess.report_note') }}
+    </div>
+</main>
+
+<div class="footer">
+    SmartBakery &copy; {{ \Carbon\Carbon::now()->format('Y') }} |
+    {{ __('guess.all_rights_reserved') }} |
+    {{ __('guess.page') }} <script type="text/php">echo $PAGE_NUM;</script>
+</div>
 </body>
 </html>

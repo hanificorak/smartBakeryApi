@@ -13,7 +13,9 @@ return [
     "weather" => "Hava",
     'production_message' => "Bugün :dayName. Hava: :weather. Geçmişte ortalama :avgProduced üretip :avgSold satmışsın. Bugün yaklaşık :suggestedProduction adet üretmen önerilir.",
     'no_data' => "Bugün için geçmiş veri bulunamadı.",
-    'Ertesi günden aktarılan kayıt.' => 'Ertesi günden aktarılan kayıt.'
+    'Ertesi günden aktarılan kayıt.' => 'Ertesi günden aktarılan kayıt.',
+    'day'=>"Gün",
+    'amount'=>"Adet"
 
 
 ];
