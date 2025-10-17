@@ -354,7 +354,6 @@
     foreach ($reportData as $item) {
         $totalAmount += $item->total_amount;
         $totalSales += $item->total_sales_amount;
-        $totalRemove += $item->total_remove_amount;
         $totalErt += $item->total_ert_count;
     }
 
