@@ -346,25 +346,24 @@
 </head>
 
 @php
-    $totalAmount = 0;
-    $totalSales = 0;
-    $totalRemove = 0;
-    $totalErt = 0;
+    $totalAmount = 0;   // Toplam Üretim
+    $totalSales = 0;    // Toplam Satış
+    $totalRemove = 0;   // Toplam Atık
 
     foreach ($reportData as $item) {
-        $totalAmount += $item->total_amount; // Üretim adedi toplanıyor
-        $totalSales += $item->total_sales_amount; // Satış adedi toplanıyor
+        $totalAmount += $item->total_amount;         // Üretim adedi toplanıyor
+        $totalSales += $item->total_sales_amount;   // Satış adedi toplanıyor
         $totalRemove += $item->total_remove_amount; // Atık adedi toplanıyor
     }
 
-    // Satış yüzdesi (toplam satış / toplam üretim * 100)
+    // Satış ve Atık yüzdelerini toplam üretim üzerinden hesapla
     $yuzdeSatis = $totalAmount > 0 ? ($totalSales / $totalAmount) * 100 : 0;
+    $yuzdeAtik  = $totalAmount > 0 ? ($totalRemove / $totalAmount) * 100 : 0;
 
-    // Atık yüzdesi (toplam atık / toplam satış * 100)
-    $yuzdeAtik = $totalSales > 0 ? ($totalRemove / $totalSales) * 100 : 0;
-
+    // İstersen yuvarlayabilirsin
+    $yuzdeSatis = round($yuzdeSatis, 2);
+    $yuzdeAtik  = round($yuzdeAtik, 2);
 @endphp
-
 
 <body>
 
