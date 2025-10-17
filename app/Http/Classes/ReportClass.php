@@ -172,6 +172,7 @@ class ReportClass
     public function totalreport()
     {
         $rs = new ResultClass();
+
         try {
             $productId = request()->get('product'); // değişken adı düzeltildi
             $weather = request()->get('weather');
@@ -204,9 +205,9 @@ class ReportClass
                 $query->where('days_info.weather_code', $weather);
             }
 
-            if (count($hiddenProd) > 0) {
-                $query->whereNotIn('products.id', $hiddenProd);
-            }
+            // if (count($hiddenProd) > 0) {
+            //     $query->whereNotIn('products.id', $hiddenProd);
+            // }
 
             $startDate = null;
             $endDate = null;
@@ -248,7 +249,6 @@ class ReportClass
             }
 
             $reportData = $query->get();
-
             // Reports klasörü oluştur (yoksa)
             $reportPath = public_path('reports');
             if (!file_exists($reportPath)) {
