@@ -348,14 +348,15 @@
 @php
     $totalAmount = 0;   // Toplam Üretim
     $totalSales = 0;    // Toplam Satış
+    $totalRemove = 0;   // Toplam Atık
 
     foreach ($reportData as $item) {
         $totalAmount += $item->total_amount;         // Üretim adedi toplanıyor
         $totalSales += $item->total_sales_amount;   // Satış adedi toplanıyor
+        $totalRemove += $item->total_remove_amount; // Atık adedi toplanıyor
     }
 
-    // Satış yüzdesi (toplam üretim üzerinden)
-    $yuzdeSatis = $totalAmount > 0 ? ($totalSales / $totalAmount) * 100 : 0;
+   $yuzdeSatis = $totalAmount > 0 ? ($totalSales / $totalAmount) * 100 : 0;
 
     // Kalan üretim yüzdesi (stok veya satılmamış ürün)
     $yuzdeKalan = $totalAmount > 0 ? (($totalAmount - $totalSales) / $totalAmount) * 100 : 0;
@@ -363,6 +364,7 @@
     $yuzdeSatis = round($yuzdeSatis, 2);
     $yuzdeKalan = round($yuzdeKalan, 2);
 @endphp
+
 
 
 <body>
@@ -416,7 +418,7 @@
         <div class="summary-cards">
             <div class="summary-card">
                 <div class="card-title">{{ __('report.waste_ratio') }}</div>
-                <div class="card-value danger"> {{ number_format($yuzdeAtik, 1) }}% </div>
+                <div class="card-value danger"> {{ number_format($yuzdeKalan, 1) }}% </div>
             </div>
             <div class="summary-card">
                 <div class="card-title">{{ __('report.sales_ratio') }}</div>
