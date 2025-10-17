@@ -362,7 +362,7 @@
     $wasteRatio = ($totalRemove / max($totalAmount, 1)) * 100;
     $salesRatio = ($totalSales / max($totalAmount, 1)) * 100;
     $turnoverRatio = ($totalErt / max($totalAmount, 1)) * 100;
-    $wasteSalesRatio = ($totalRemove / max($totalSales, 1)) * 100;
+    $wasteSalesRatio = ($totalRemove / max($totalSales, values: 1)) * 100;
 @endphp
 
 <body>
@@ -413,6 +413,21 @@
             </div>
         </div>
 
+        <div class="summary-cards">
+            <div class="summary-card">
+                <div class="card-title">{{ __('report.waste_ratio') }}</div>
+                <div class="card-value danger"> {{ number_format($wasteRatio, 1) }}% </div>
+            </div>
+            <div class="summary-card">
+                <div class="card-title">{{ __('totalrep.sales_ratio') }}</div>
+                <div class="card-value">{{ number_format($salesRatio, 1) }}%</div>
+            </div>
+            <div class="summary-card">
+                <div class="card-title">{{ __('totalrep.waste_sales_ratio') }}</div>
+                <div class="card-value blue">{{ number_format($wasteSalesRatio, 1) }}%</div>
+            </div>
+        </div>
+
         <!-- YENİ: Gradient kartlar ile oranlar -->
         <div class="ratios-section">
             <div class="ratios-grid">
@@ -420,22 +435,15 @@
                     <div class="ratio-card waste">
                         <div class="ratio-label">{{ __('report.waste_ratio') }}</div>
                         <div class="ratio-value">{{ number_format($wasteRatio, 1) }}%</div>
-                        <div class="ratio-subtitle">Fire Oranı</div>
                     </div>
                     <div class="ratio-card sales">
                         <div class="ratio-label">{{ __('report.sales_ratio') }}</div>
                         <div class="ratio-value">{{ number_format($salesRatio, 1) }}%</div>
-                        <div class="ratio-subtitle">Satış Oranı</div>
                     </div>
-                    <div class="ratio-card turnover">
-                        <div class="ratio-label">{{ __('report.turnover_ratio') }}</div>
-                        <div class="ratio-value">{{ number_format($turnoverRatio, 1) }}%</div>
-                        <div class="ratio-subtitle">Devir Oranı</div>
-                    </div>
+
                     <div class="ratio-card waste-sales">
                         <div class="ratio-label">{{ __('report.waste_sales_ratio') }}</div>
                         <div class="ratio-value">{{ number_format($wasteSalesRatio, 1) }}%</div>
-                        <div class="ratio-subtitle">Fire/Satış</div>
                     </div>
                 </div>
             </div>

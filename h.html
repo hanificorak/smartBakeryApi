@@ -1,0 +1,87 @@
+
+<!-- jitsi-api.html -->
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jitsi External API Örneği</title>
+  <style>
+    body, html { margin:0; height:100%; }
+    #meet { height: 90vh; width: 100%; }
+    #controls { padding: 8px; display:flex; gap:8px; align-items:center; }
+  </style>
+</head>
+<body>
+  <div id="controls">
+    <button id="join">Katıl</button>
+    <button id="leave">Ayrıl</button>
+    <button id="toggleAudio">Ses Aç/Kapat</button>
+    <button id="toggleVideo">Video Aç/Kapat</button>
+  </div>
+
+  <div id="meet"></div>
+
+  <script src="https://meet.jit.si/external_api.js"></script>
+  <script>
+    const domain = "meet.jit.si";
+    const roomName = "TechFlow_Ozel_Oda_12345"; // kendinize göre değiştirin
+    let api = null;
+
+    function createAPI() {
+      if (api) return api;
+      const options = {
+        roomName: roomName,
+        parentNode: document.getElementById('meet'),
+        width: '100%',
+        height: '100%',
+        interfaceConfigOverwrite: {
+          // arayüzde bazı elemanları gizleyebilirsiniz
+          TOOLBAR_BUTTONS: [
+            'microphone', 'camera', 'chat', 'tileview', 'desktop', 'hangup'
+          ]
+        },
+        configOverwrite: {
+          // örn. video kalite sınırlaması gibi ayarlar buraya
+          startWithAudioMuted: false,
+          startWithVideoMuted: false
+        },
+        userInfo: { displayName: "Ziyaretçi" }
+      };
+      api = new JitsiMeetExternalAPI(domain, options);
+
+      // Olay dinleyiciler (örnek)
+      api.addEventListener('participantJoined', (id) => {
+        console.log('Katılımcı katıldı:', id);
+      });
+      api.addEventListener('participantLeft', (id) => {
+        console.log('Katılımcı ayrıldı:', id);
+      });
+      api.addEventListener('videoConferenceJoined', (evt) => {
+        console.log('Toplantıya katıldı:', evt);
+      });
+
+      return api;
+    }
+
+    // Kontroller
+    document.getElementById('join').addEventListener('click', () => createAPI());
+    document.getElementById('leave').addEventListener('click', () => {
+      if (!api) return;
+      api.executeCommand('hangup');
+      api.dispose();
+      api = null;
+      document.getElementById('meet').innerHTML = '';
+    });
+    document.getElementById('toggleAudio').addEventListener('click', () => {
+      if (!api) return;
+      api.executeCommand('toggleAudio');
+    });
+    document.getElementById('toggleVideo').addEventListener('click', () => {
+      if (!api) return;
+      api.executeCommand('toggleVideo');
+    });
+
+  </script>
+</body>
+</html>

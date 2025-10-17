@@ -37,7 +37,7 @@ class NotificationSend extends Command
 
             $check = EndOfDays::where('firm_id', $value->firm_id)->whereDate('created_at', Carbon::now())->exists();
             if (!$check) {
-                array_push($expoPushTokens, ['ExponentPushToken[' . $value->notification_token . ']']);
+                array_push($expoPushTokens, $value->notification_token);
             }
         }
 
@@ -53,7 +53,7 @@ class NotificationSend extends Command
             ];
         }
 
-        // Expo Push API endpoint
+
         $response = Http::post('https://exp.host/--/api/v2/push/send', $messages);
 
         if ($response->successful()) {
