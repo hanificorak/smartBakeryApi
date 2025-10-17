@@ -354,15 +354,17 @@
     foreach ($reportData as $item) {
         $totalAmount += $item->total_amount; // Üretim adedi toplanıyor
         $totalSales += $item->total_sales_amount; // Satış adedi toplanıyor
-        $totalErt += $item->total_ert_count;
+        $totalRemove += $item->total_remove_amount; // Atık adedi toplanıyor
     }
 
+    // Satış yüzdesi (toplam satış / toplam üretim * 100)
+    $yuzdeSatis = $totalAmount > 0 ? ($totalSales / $totalAmount) * 100 : 0;
 
-    $yuzdeSatis = ($totalSales / $totalAmount) * 100;
-    $yuzdeAtik = ($totalRemove / $totalAmount) * 100;
-
+    // Atık yüzdesi (toplam atık / toplam satış * 100)
+    $yuzdeAtik = $totalSales > 0 ? ($totalRemove / $totalSales) * 100 : 0;
 
 @endphp
+
 
 <body>
 
