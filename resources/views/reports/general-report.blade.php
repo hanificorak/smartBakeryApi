@@ -421,34 +421,12 @@
                 <div class="card-title">{{ __('report.sales_ratio') }}</div>
                 <div class="card-value">{{ number_format($yuzdeSatis, 1) }}%</div>
             </div>
-           
+
         </div>
 
 
 
-        <!-- ALTERNATİF: Basit tasarım (yukarıdaki yerine kullanabilirsiniz) -->
-        <!--
-        <div class="ratios-simple">
-            <div class="ratios-simple-row">
-                <div class="ratio-simple-cell">
-                    <div class="ratio-simple-label">{{ __('report.waste_ratio') }}</div>
-                    <div class="ratio-simple-value danger">{{ number_format($wasteRatio, 1) }}%</div>
-                </div>
-                <div class="ratio-simple-cell">
-                    <div class="ratio-simple-label">{{ __('report.sales_ratio') }}</div>
-                    <div class="ratio-simple-value success">{{ number_format($salesRatio, 1) }}%</div>
-                </div>
-                <div class="ratio-simple-cell">
-                    <div class="ratio-simple-label">{{ __('report.turnover_ratio') }}</div>
-                    <div class="ratio-simple-value">{{ number_format($turnoverRatio, 1) }}%</div>
-                </div>
-                <div class="ratio-simple-cell">
-                    <div class="ratio-simple-label">{{ __('report.waste_sales_ratio') }}</div>
-                    <div class="ratio-simple-value warning">{{ number_format($wasteSalesRatio, 1) }}%</div>
-                </div>
-            </div>
-        </div>
-        -->
+
     </div>
 
     <!-- Data Table -->
