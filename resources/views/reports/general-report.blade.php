@@ -352,16 +352,16 @@
     $totalErt = 0;
 
     foreach ($reportData as $item) {
-        $totalAmount += $item->total_amount;
-        $totalSales += $item->total_sales_amount;
+        $totalAmount += $item->total_amount; // Üretim adedi toplanıyor
+        $totalSales += $item->total_sales_amount; // Satış adedi toplanıyor
         $totalErt += $item->total_ert_count;
     }
 
-    // Oranlar
-    $wasteRatio = ($totalRemove / max($totalAmount, 1)) * 100;
-    $salesRatio = ($totalSales / max($totalAmount, 1)) * 100;
-    $turnoverRatio = ($totalErt / max($totalAmount, 1)) * 100;
-$wasteSalesRatio = ($totalRemove / max($totalSales, 1)) * 100;
+
+    $yuzdeSatis = ($totalSales / $totalAmount) * 100;
+    $yuzdeAtik = ($totalRemove / $totalAmount) * 100;
+
+
 @endphp
 
 <body>
@@ -415,16 +415,13 @@ $wasteSalesRatio = ($totalRemove / max($totalSales, 1)) * 100;
         <div class="summary-cards">
             <div class="summary-card">
                 <div class="card-title">{{ __('report.waste_ratio') }}</div>
-                <div class="card-value danger"> {{ number_format($wasteRatio, 1) }}% </div>
+                <div class="card-value danger"> {{ number_format($yuzdeAtik, 1) }}% </div>
             </div>
             <div class="summary-card">
                 <div class="card-title">{{ __('report.sales_ratio') }}</div>
-                <div class="card-value">{{ number_format($salesRatio, 1) }}%</div>
+                <div class="card-value">{{ number_format($yuzdeSatis, 1) }}%</div>
             </div>
-            <div class="summary-card">
-                <div class="card-title">{{ __('report.waste_sales_ratio') }}</div>
-                <div class="card-value blue">{{ number_format($wasteSalesRatio, 1) }}%</div>
-            </div>
+           
         </div>
 
 
